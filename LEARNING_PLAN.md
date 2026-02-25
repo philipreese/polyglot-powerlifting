@@ -180,9 +180,10 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [x] **Branching:** Create branch `feat/svelte-web` from `main`
 - [x] **Setup:** Initialize SvelteKit with TypeScript and Tailwind v4 (learning the new `@theme` CSS block rather than `tailwind.config.js`)
 - [x] **State:** Manage global calculator state strictly using **Svelte 5 Runes** (`$state`, `$derived`), abandoning all legacy Svelte 4 `$store` syntax
-- [ ] **Type Sync:** Auto-generate Svelte TypeScript types AND Zod schemas (using `openapi-zod-client` or similar) from the FastAPI `openapi.json` so frontend/backend stay 100% concurrent.
-- [ ] **Offline/Local:** Implement `localStorage` persistence for anonymous users
+- [x] **Type Sync:** Auto-generate Svelte TypeScript types AND Zod schemas (using `openapi-zod-client` or similar) from the FastAPI `openapi.json` so frontend/backend stay 100% concurrent.
+- [x] **Offline/Local:** Implement `localStorage` persistence for anonymous users
 - [ ] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
+- [x] **Feature:** "Featured Metric" Option - Allow user to toggle their preferred metric (e.g. IPF GL instead of DOTS) globally.
 - [x] **Validation:** Add **Zod** to validate form inputs before sending to API
 - [ ] **Testing:** Write your first **Playwright** E2E test (e.g., "User can calculate Wilks without logging in")
 - [ ] **Merge:** Open PR, merge `feat/svelte-web` into `main`
@@ -222,6 +223,14 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [ ] **Accessibility:** Add `axe-core` to your Playwright tests to catch missing labels and bad contrast
 - [ ] **Release:** Set up `release-please` for automated semantic versioning and CHANGELOG generation based on your conventional commits
 - [ ] **Merge:** PR and merge into `main`. Watch `release-please` automatically tag `v1.0.0`
+
+### Phase 7 — Cross-Stack Feature Deploy (The Masterclass)
+- [ ] **Branching:** Create branch `feat/pr-graphs`
+- [ ] **Backend:** Update the database and API endpoints to support retrieving historical data specifically for graphing (aggregate data over time).
+- [ ] **SvelteKit:** Build a `/pr-graphs` page with a beautiful interactive chart using a library like Chart.js or LayerChart.
+- [ ] **React Native:** Implement the matching logic using `react-native-chart-kit` or Skia graphs to achieve a native feel.
+- [ ] **Flutter:** Replicate the exact visual layout and graphing logic using Flutter's `fl_chart`.
+- [ ] **Merge:** This final phase gives you a true understanding of deploying a major, data-driven feature update across multiple completely segregated mono-repo architectures simultaneously!
 
 ---
 

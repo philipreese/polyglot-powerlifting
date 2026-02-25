@@ -4,7 +4,8 @@
   import Select from '$lib/components/ui/Select.svelte';
   import Card from '$lib/components/ui/Card.svelte';
   import Button from '$lib/components/ui/Button.svelte';
-
+  import { METRIC_CONFIG } from '$lib/constants';
+ 
   // Retrieve the reactive Svelte 5 state from the context
   const state = getCalculatorState();
 </script>
@@ -12,7 +13,7 @@
 <Card class="space-y-6">
   <h2 class="text-xl font-heading font-semibold text-slate-900 dark:text-white">Lifter Profile</h2>
   
-  <div class="grid grid-cols-2 gap-4">
+  <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
     <Select id="gender" label="Gender" bind:value={state.gender}>
       <option value="male">Male</option>
       <option value="female">Female</option>
@@ -23,7 +24,17 @@
       <option value="single-ply">Single-ply</option>
       <option value="multi-ply">Multi-ply</option>
     </Select>
+
+    <Select id="preferredMetric" label="Preferred Metric" bind:value={state.preferredMetric}>
+      {#each Object.values(METRIC_CONFIG) as metric}
+        <option value={metric.key}>{metric.label}</option>
+      {/each}
+    </Select>
   </div>
+
+  {#if typeof window !== 'undefined'}
+    {@const _ = state.preferredMetric && localStorage.setItem('preferred_metric', state.preferredMetric)}
+  {/if}
 
   <div class="space-y-4 pt-4 border-t border-slate-200 dark:border-slate-700">
     <h3 class="text-lg font-heading font-medium text-slate-900 dark:text-white">Lifts (kg)</h3>

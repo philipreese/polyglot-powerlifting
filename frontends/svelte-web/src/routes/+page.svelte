@@ -2,6 +2,7 @@
   import CalculatorInput from '$lib/components/CalculatorInput.svelte';
   import CalculatorResults from '$lib/components/CalculatorResults.svelte';
   import ThemeToggle from '$lib/components/ThemeToggle.svelte';
+  import HistoryList from '$lib/components/HistoryList.svelte';
 </script>
 
 <div class="min-h-screen p-4 md:p-8">
@@ -16,16 +17,24 @@
     </header>
 
     <!-- Main Layout Grid -->
-    <main class="grid grid-cols-1 md:grid-cols-2 gap-8">
+    <main class="space-y-8">
       
-      <!-- Left Column: Inputs -->
-      <section>
-        <CalculatorInput />
-      </section>
+      <!-- Top Row: Input / Output -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+        <!-- Left Column: Inputs -->
+        <section>
+          <CalculatorInput />
+        </section>
 
-      <!-- Right Column: Results -->
+        <!-- Right Column: Results -->
+        <section>
+          <CalculatorResults />
+        </section>
+      </div>
+
+      <!-- Bottom Row: History Panel -->
       <section>
-        <CalculatorResults />
+        <HistoryList />
       </section>
 
     </main>

@@ -3,8 +3,14 @@
   import MetricCard from '$lib/components/ui/MetricCard.svelte';
   import { getCalculatorState } from '$lib/state/calculator.svelte';
   import { Calculator } from 'lucide-svelte';
+  import { METRIC_CONFIG, type MetricKey } from '$lib/constants';
 
   const state = getCalculatorState();
+
+  let primaryMetric = $derived(METRIC_CONFIG[state.preferredMetric]);
+  let secondaryMetrics = $derived(
+    Object.values(METRIC_CONFIG).filter(m => m.key !== state.preferredMetric)
+  );
 </script>
 
 <Card class="h-full flex flex-col">
@@ -12,14 +18,19 @@
 
   {#if state.wilks !== null}
     <div class="space-y-6 flex-grow">
-      <!-- Primary Metric: DOTS (Industry Standard) -->
-      <MetricCard title="DOTS Score" value={state.dots} isPrimary={true} />
+      <!-- Primary Metric: Driven by User Preference -->
+      <MetricCard title={primaryMetric.label + " Score"} value={state[primaryMetric.key as MetricKey]} isPrimary={true} />
 
       <!-- Other Coefficients -->
       <div class="grid grid-cols-2 gap-4">
-        <MetricCard title="IPF GL" value={state.ipf_gl} />
-        <MetricCard title="Wilks" value={state.wilks} />
-        <MetricCard title="Reshel" value={state.reshel} colSpan={2} />
+        {#each secondaryMetrics as metric, i}
+          <!-- Make the last metric span both columns so the grid is perfectly flush -->
+          <MetricCard 
+            title={metric.label} 
+            value={state[metric.key as MetricKey]} 
+            colSpan={i === 2 ? 2 : 1} 
+          />
+        {/each}
       </div>
     </div>
   {:else}

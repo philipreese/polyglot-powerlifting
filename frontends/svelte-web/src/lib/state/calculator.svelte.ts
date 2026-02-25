@@ -1,5 +1,6 @@
 import { setContext, getContext } from 'svelte';
 import { LiftSchema } from '$lib/schemas';
+import type { LiftResponse } from '$lib/schemas';
 import { ApiService } from '$lib/services/api';
 
 export class CalculatorState {
@@ -19,6 +20,35 @@ export class CalculatorState {
     // Network & Validation States
     isLoading = $state(false);
     error = $state<string | null>(null);
+
+    // Persistence
+    history = $state<LiftResponse[]>([]);
+    preferredMetric = $state<'dots' | 'wilks' | 'ipf_gl' | 'reshel'>('dots');
+
+    constructor() {
+        if (typeof window !== 'undefined') {
+            const storedHistory = localStorage.getItem('anonymous_lifts_history');
+            if (storedHistory) {
+                try {
+                    this.history = JSON.parse(storedHistory);
+                } catch (e) {
+                    console.error("Failed to parse local history");
+                }
+            }
+
+            const storedMetric = localStorage.getItem('preferred_metric') as 'dots' | 'wilks' | 'ipf_gl' | 'reshel';
+            if (storedMetric && ['dots', 'wilks', 'ipf_gl', 'reshel'].includes(storedMetric)) {
+                this.preferredMetric = storedMetric;
+            }
+        }
+    }
+
+    setPreferredMetric(metric: 'dots' | 'wilks' | 'ipf_gl' | 'reshel') {
+        this.preferredMetric = metric;
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('preferred_metric', metric);
+        }
+    }
 
     // Derived values using native JS getters
     get total() {
@@ -54,10 +84,36 @@ export class CalculatorState {
             this.ipf_gl = data.ipf_gl;
             this.reshel = data.reshel;
 
+            // 4. Save to anonymous local history
+            const newRecord: LiftResponse = {
+                ...data,
+                id: crypto.randomUUID(),
+                created_at: new Date().toISOString()
+            };
+            
+            this.history = [newRecord, ...this.history];
+            this._persistHistory();
+
         } catch (err: any) {
             this.error = err.message || "Failed to connect to API";
         } finally {
             this.isLoading = false;
+        }
+    }
+
+    deleteHistoryRecord(id: string) {
+        this.history = this.history.filter(record => record.id !== id);
+        this._persistHistory();
+    }
+
+    clearHistory() {
+        this.history = [];
+        this._persistHistory();
+    }
+
+    private _persistHistory() {
+        if (typeof window !== 'undefined') {
+            localStorage.setItem('anonymous_lifts_history', JSON.stringify(this.history));
         }
     }
 }
