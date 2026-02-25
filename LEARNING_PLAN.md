@@ -14,6 +14,7 @@ Calculate and track Wilks, DOTS, IPF GL, and Reshel scores based on bodyweight, 
 
 ## AI Collaboration Guidelines
 - **Explain Everything**: The AI must explain *what* commands it runs, *how* tools work under the hood (like SSH, WSL, or networking), and *why* specific approaches are chosen. No "black box" magic. The goal is deep understanding.
+- **Explicit Permission**: The AI must NEVER commit or push code to Git without explicitly asking the user for permission first.
 
 ---
 
