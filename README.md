@@ -49,4 +49,17 @@ You can develop directly on your host machine without WSL or Docker.
 
 ---
 
+---
+
+## Developer Experience (DX)
+
+We maintain unified code formatting across all languages in this repository using global configuration files:
+
+- **EditorConfig:** Standardizes our indentations (`.editorconfig`). We use 2 spaces for Web/Mobile (JS, TS, Svelte) and 4 spaces for Backend (Python) to align with community standards.
+- **Prettier:** Formats our JavaScript, TypeScript, and Svelte code (`.prettierrc`). We enforce single quotes and a 100-character line limit.
+- **ESLint:** Lints our JavaScript/TypeScript code (`eslint.config.mjs`) to catch potential bugs and enforce best practices (e.g., warning on unused variables).
+- **Ruff:** An extremely fast Python linter and formatter (`pyproject.toml`). It is configured to match Prettier's formatting rules (e.g., 100-character line limits) while honoring Python standards.
+
+If you are using the DevContainer, the VS Code extensions for all three of these tools are installed automatically.
+
 *See `LEARNING_PLAN.md` for the complete architectural roadmap and progress checklist.*

@@ -12,6 +12,3 @@ RUN apt-get update && export DEBIAN_FRONTEND=noninteractive \
     && apt-get clean && rm -rf /var/lib/apt/lists/*
 
 # Note: Node.js (with pnpm) and Python are installed via devcontainer features.
-
-# (Optional) Future-proofing: We could install Flutter here, 
-# but per the learning plan it can be installed just-in-time in Phase 5.

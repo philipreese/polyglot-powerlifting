@@ -1,0 +1,9 @@
+node_modules
+.svelte-kit
+.next
+.expo
+build
+dist
+Coverage
+.venv
+__pycache__

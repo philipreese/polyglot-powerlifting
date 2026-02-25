@@ -1,0 +1,21 @@
+# EditorConfig is awesome: https://EditorConfig.org
+
+# top-most EditorConfig file
+root = true
+
+# Unix-style newlines with a newline ending every file
+[*]
+end_of_line = lf
+insert_final_newline = true
+trim_trailing_whitespace = true
+charset = utf-8
+
+# 2 spaces for JS/TS, Svelte, JSON, YAML, Markdown
+[*.{js,ts,mjs,cjs,svelte,json,yaml,yml,md}]
+indent_style = space
+indent_size = 2
+
+# 4 spaces for Python
+[*.py]
+indent_style = space
+indent_size = 4
