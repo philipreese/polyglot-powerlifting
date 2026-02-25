@@ -152,10 +152,10 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 ### Phase 0 — Prep & Infrastructure (Do this before coding)
 - [x] **Git over SSH:** Generate an SSH keypair (`ssh-keygen`), add the public key to GitHub, and clone the empty repo using the `git@github.com` URL instead of HTTPS. Understand the difference.
 - [x] **Spec & Design:** Document all 4 coefficient formulas (We will adopt a **Code-First API Design**, using FastAPI's Pydantic models to auto-generate our OpenAPI spec).
-- [ ] **Branding:** Define color palette (primary/surface/text), typography choices, and icon set (e.g. Material or Lucide) in a central design document (or Figma) so all 3 apps look like the same product
-- [ ] **Repo Setup:** Initialize Git (via SSH clone), create `.gitignore`, set up `pnpm` workspaces
+- [x] **Branding:** Define color palette (primary/surface/text), typography choices, and icon set (e.g. Material or Lucide) in a central design document (or Figma) so all 3 apps look like the same product
+- [x] **Repo Setup:** Initialize Git (via SSH clone), create `.gitignore`, set up `pnpm` workspaces
 - [x] **Environment:** Create `.devcontainer/` so your tools (Node, Python, Flutter) are consistent
-- [ ] **Database:** Set up Supabase free tier, create `lifts` table schema, enable Auth
+- [x] **Database:** Set up Supabase free tier, create `lifts` table schema, enable Auth
 - [x] **DX:** Add Prettier/ESLint configs for JS/TS, Ruff for Python
 
 ### Phase 1 — FastAPI Backend (The Foundation)
