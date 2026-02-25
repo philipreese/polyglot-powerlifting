@@ -1,0 +1,37 @@
+{
+  "name": "Polyglot Powerlifting",
+  "build": {
+    "dockerfile": "Dockerfile",
+    "context": ".."
+  },
+  "features": {
+    "ghcr.io/devcontainers/features/node:1": {
+      "version": "20",
+      "pnpmVersion": "latest"
+    },
+    "ghcr.io/devcontainers/features/python:1": {
+      "version": "3.12"
+    }
+  },
+  "customizations": {
+    "vscode": {
+      "settings": {
+        "editor.formatOnSave": true,
+        "editor.defaultFormatter": "esbenp.prettier-vscode",
+        "[python]": {
+          "editor.defaultFormatter": "charliermarsh.ruff",
+          "editor.formatOnSave": true
+        }
+      },
+      "extensions": [
+        "esbenp.prettier-vscode",
+        "dbaeumer.vscode-eslint",
+        "charliermarsh.ruff",
+        "svelte.svelte-vscode",
+        "Dart-Code.flutter"
+      ]
+    }
+  },
+  "postCreateCommand": "pnpm install && pip install uv && uv tool install ruff",
+  "remoteUser": "vscode"
+}
