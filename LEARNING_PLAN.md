@@ -17,7 +17,8 @@ Calculate and track Wilks, DOTS, IPF GL, and Reshel scores based on bodyweight, 
 - **Commit Frequency**: The AI should commit frequently, particularly separating "Initialization/Scaffolding" steps from "Configuration/Styling" steps so the Git history serves as a clean learning log.
 - **Explicit Permission**: The AI must NEVER commit or push code to Git without explicitly asking the user for permission first.
 - **Industry Best Practices**: The AI must use and explain modern design patterns (e.g., repository pattern, dependency injection, middleware) rather than taking quick-and-dirty shortcuts. Code should be clean, modular, and testable from the start.
-
+- **Self-Critique & Anti-Patterns**: The AI must actively scan for Tech Debt, circular dependencies, and duplicate code logic before proposing any feature implementation, and explicitly ask the User if they would like to abstract the anti-pattern before moving forward.
+- **Plan Updating**: The AI must update the plan as we go, including checking off items from the checklist below, and explicitly ask the User if they would like to update the plan before moving forward.
 ---
 
 ## Auth + Storage Pattern

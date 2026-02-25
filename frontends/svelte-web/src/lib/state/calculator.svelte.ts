@@ -1,5 +1,6 @@
 import { setContext, getContext } from 'svelte';
-import { LiftSchema } from '$lib/schemas/lift';
+import { LiftSchema } from '$lib/schemas';
+import { ApiService } from '$lib/services/api';
 
 export class CalculatorState {
     bodyweight = $state(80.0);
@@ -45,7 +46,6 @@ export class CalculatorState {
         // 2. Fetch from FastAPI Backend
         this.isLoading = true;
         try {
-            const { ApiService } = await import('$lib/services/api');
             const data = await ApiService.calculateScores(parsed.data);
             
             // 3. Update reactive state with results!

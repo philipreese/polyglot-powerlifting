@@ -31,14 +31,17 @@ def create_lift(
         "reshel": reshel
     })
     
+    # Materialize the data into the canonical Domain Model
+    lift_response_model = LiftResponse(**response_data)
+    
     # If the user is authenticated, save to the database via Repository
     if user_id:
-        response_data["user_id"] = user_id
-        db_record = LiftsRepository.create(response_data)
+        lift_response_model.user_id = UUID(user_id) if isinstance(user_id, str) else user_id
+        db_record = LiftsRepository.create(lift_response_model)
         if db_record:
             return db_record
             
-    return response_data
+    return lift_response_model
 
 @router.get("/", response_model=List[LiftResponse])
 def get_lifts(user_id: str = Depends(require_current_user)):

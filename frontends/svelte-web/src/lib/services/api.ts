@@ -1,5 +1,7 @@
-import type { LiftRequest } from '$lib/schemas/lift';
+import type { LiftRequest } from '$lib/schemas';
 
+// The ApiService acts as the HTTP network boundary for our application, 
+// strictly utilizing backend domain models to communicate with FastAPI.
 export class ApiService {
   /**
    * Submits lift data to the FastAPI backend and calculates scores.

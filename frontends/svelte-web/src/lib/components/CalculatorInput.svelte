@@ -3,6 +3,7 @@
   import Input from '$lib/components/ui/Input.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import Card from '$lib/components/ui/Card.svelte';
+  import Button from '$lib/components/ui/Button.svelte';
 
   // Retrieve the reactive Svelte 5 state from the context
   const state = getCalculatorState();
@@ -77,10 +78,9 @@
     </div>
   {/if}
 
-  <button 
+  <Button 
     onclick={() => state.calculate()} 
     disabled={state.isLoading}
-    class="w-full py-3 bg-brand-primary hover:bg-brand-primary/90 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-primary dark:focus-visible:ring-offset-slate-800"
   >
     {#if state.isLoading}
       <span class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
@@ -88,5 +88,5 @@
     {:else}
       Calculate Scores
     {/if}
-  </button>
+  </Button>
 </Card>
