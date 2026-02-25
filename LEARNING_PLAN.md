@@ -160,7 +160,7 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [x] **DX:** Add Prettier/ESLint configs for JS/TS, Ruff for Python
 
 ### Phase 1 — FastAPI Backend (The Foundation)
-- [ ] **Branching:** Create branch `feat/fastapi-core` from `main`
+- [x] **Branching:** Create branch `feat/fastapi-init` from `main`
 - [x] **Architecture:** Build nested `README.md` and `Makefile`, then organize files into `/routes`, `/models`, and `/services`
 - [x] **Core:** Implement `POST`, `GET`, and `DELETE` /lifts endpoints based on your OpenAPI spec
 - [x] **Validation:** Use **Pydantic v2** for robust request/response validation
@@ -169,9 +169,9 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [x] **Auth:** Verify Supabase JWTs in middleware to protect the history endpoints
 - [x] **Documentation:** Explore the auto-generated Swagger UI at `/docs`
 - [x] **Security:** Configure CORS properly so the web frontends can call it
-- [ ] **Containerization:** Write a `Dockerfile` using `uv` to build the API
-- [ ] **Commit:** Use conventional commits (e.g., `feat: add calculate endpoint`, `chore: add dockerfile`)
-- [ ] **Merge:** Open a Pull Request, review your own diff, merge into `main`
+- [x] **Containerization:** Write a `Dockerfile` using `uv` to build the API
+- [x] **Commit:** Use conventional commits (e.g., `feat: add calculate endpoint`, `chore: add dockerfile`)
+- [x] **Merge:** Open a Pull Request, review your own diff, merge into `main`
 - [x] **CI/CD:** Set up GitHub Actions on `main` to run Ruff (linting) and pytest, then deploy to Render
 
 ### Phase 2 — SvelteKit Frontend (Familiar Territory)
