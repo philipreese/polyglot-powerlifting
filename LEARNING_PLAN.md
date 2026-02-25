@@ -150,7 +150,7 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 
 ### Phase 0 — Prep & Infrastructure (Do this before coding)
 - [x] **Git over SSH:** Generate an SSH keypair (`ssh-keygen`), add the public key to GitHub, and clone the empty repo using the `git@github.com` URL instead of HTTPS. Understand the difference.
-- [ ] **Spec & Design:** Write OpenAPI spec and document all 4 coefficient formulas
+- [x] **Spec & Design:** Document all 4 coefficient formulas (We will adopt a **Code-First API Design**, using FastAPI's Pydantic models to auto-generate our OpenAPI spec).
 - [ ] **Branding:** Define color palette (primary/surface/text), typography choices, and icon set (e.g. Material or Lucide) in a central design document (or Figma) so all 3 apps look like the same product
 - [ ] **Repo Setup:** Initialize Git (via SSH clone), create `.gitignore`, set up `pnpm` workspaces
 - [x] **Environment:** Create `.devcontainer/` so your tools (Node, Python, Flutter) are consistent
@@ -175,6 +175,7 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [ ] **State:** Use Svelte 5 runes + stores for the calculator state
 - [ ] **Offline/Local:** Implement `localStorage` persistence for anonymous users
 - [ ] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
+- [ ] **Type Sync:** Write a script using `openapi-typescript` to auto-generate Svelte TypeScript types from the FastAPI `openapi.json`
 - [ ] **Validation:** Add **Zod** to validate form inputs before sending to API
 - [ ] **Testing:** Write your first **Playwright** E2E test (e.g., "User can calculate Wilks without logging in")
 - [ ] **Merge:** Open PR, merge `feat/svelte-web` into `main`
