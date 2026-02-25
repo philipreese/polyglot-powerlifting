@@ -13,7 +13,8 @@ Calculate and track Wilks, DOTS, IPF GL, and Reshel scores based on bodyweight, 
 ---
 
 ## AI Collaboration Guidelines
-- **Explain Everything**: The AI must explain *what* commands it runs, *how* tools work under the hood (like SSH, WSL, or networking), and *why* specific approaches are chosen. No "black box" magic. The goal is deep understanding.
+- **Explain Everything**: The AI must explain *what* commands it runs, *how* tools work under the hood (like SSH, WSL, or networking), and *why* specific approaches are chosen. No "black box" magic. The goal is deep understanding. The AI must explain EVERY step before moving on, avoiding large dumps of undefined code.
+- **Commit Frequency**: The AI should commit frequently, particularly separating "Initialization/Scaffolding" steps from "Configuration/Styling" steps so the Git history serves as a clean learning log.
 - **Explicit Permission**: The AI must NEVER commit or push code to Git without explicitly asking the user for permission first.
 - **Industry Best Practices**: The AI must use and explain modern design patterns (e.g., repository pattern, dependency injection, middleware) rather than taking quick-and-dirty shortcuts. Code should be clean, modular, and testable from the start.
 
