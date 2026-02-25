@@ -1,0 +1,33 @@
+node_modules/
+dist/
+build/
+.env
+.env.*
+!.env.example
+
+# SvelteKit / Next.js
+.svelte-kit/
+.next/
+
+# React Native / Expo
+.expo/
+babel.config.js
+metro.config.js
+
+# Python / FastAPI
+__pycache__/
+.venv/
+.pytest_cache/
+.ruff_cache/
+*.pyc
+
+# Flutter / Dart
+.dart_tool/
+.packages
+build/
+.pub-cache/
+.pub/
+
+# OS
+.DS_Store
+Thumbs.db
