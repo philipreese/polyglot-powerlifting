@@ -1,0 +1,20 @@
+on:
+  push:
+    branches:
+      - main
+
+name: release-please
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  release-please:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: googleapis/release-please-action@v4
+        with:
+          # Use the manifest approach for monorepo support
+          config-file: release-please-config.json
+          manifest-file: .release-please-manifest.json
