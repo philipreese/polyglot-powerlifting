@@ -12,9 +12,6 @@ services:
     dockerfilePath: ./backends/fastapi/Dockerfile
     # Automatically deploy when code is pushed to main
     autoDeploy: true
+    # Connects to the Render Environment Group named 'SUPABASE_CREDENTIALS'
     envVars:
-      # These values must be manually entered into the Render Dashboard securely
-      - key: SUPABASE_URL
-        sync: false
-      - key: SUPABASE_ANON_KEY
-        sync: false
+      - fromGroup: SUPABASE_CREDENTIALS

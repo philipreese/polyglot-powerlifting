@@ -12,7 +12,7 @@ Copy the `.env.example` file to `.env` and fill in your Supabase credentials:
 ```bash
 cp .env.example .env
 ```
-*(Ask your team or check your Supabase dashboard for the `SUPABASE_URL` and `SUPABASE_ANON_KEY`).*
+*(Ask your team or check your Supabase dashboard for the `SUPABASE_URL` and `SUPABASE_KEY`).*
 
 ### 2. Running the Server
 Because we use `uv`, you don't need to manually activate virtual environments. You can run the FastAPI development server with one command:
