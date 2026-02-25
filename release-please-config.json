@@ -5,6 +5,9 @@
     },
     "backends/fastapi": {
       "release-type": "python"
+    },
+    "frontends/svelte-web": {
+      "release-type": "node"
     }
   }
 }

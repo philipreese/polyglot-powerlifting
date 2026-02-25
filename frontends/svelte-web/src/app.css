@@ -1,0 +1,44 @@
+@import "tailwindcss";
+
+/* 1. Tell Tailwind v4 to trigger dark: variants when the .dark class is on the HTML root */
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --color-brand-primary: #4338CA;
+  --color-brand-success: #10B981;
+  
+  /* Light mode tokens */
+  --color-bg-main: #F8F9FA;
+  --color-bg-surface: #FFFFFF;
+  --color-text-primary: #0F172A;
+  --color-text-muted: #64748B;
+  
+  /* Fonts */
+  --font-sans: 'Inter', sans-serif;
+  --font-heading: 'Outfit', sans-serif;
+}
+
+@layer base {
+  body {
+    background-color: var(--color-bg-main);
+    color: var(--color-text-primary);
+  }
+
+  /* 2. When mode-watcher injects the .dark class, overwrite our variables! */
+  .dark {
+    --color-bg-main: #020617;
+    --color-bg-surface: #0F172A;
+    --color-text-primary: #F8FAFC;
+    --color-brand-primary: #818CF8;
+  }
+
+  /* 3. Hide bare HTML up/down spin buttons on number inputs globally */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+  }
+}

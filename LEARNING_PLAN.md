@@ -13,10 +13,12 @@ Calculate and track Wilks, DOTS, IPF GL, and Reshel scores based on bodyweight, 
 ---
 
 ## AI Collaboration Guidelines
-- **Explain Everything**: The AI must explain *what* commands it runs, *how* tools work under the hood (like SSH, WSL, or networking), and *why* specific approaches are chosen. No "black box" magic. The goal is deep understanding.
+- **Explain Everything**: The AI must explain *what* commands it runs, *how* tools work under the hood (like SSH, WSL, or networking), and *why* specific approaches are chosen. No "black box" magic. The goal is deep understanding. The AI must explain EVERY step before moving on, avoiding large dumps of undefined code.
+- **Commit Frequency**: The AI should commit frequently, particularly separating "Initialization/Scaffolding" steps from "Configuration/Styling" steps so the Git history serves as a clean learning log.
 - **Explicit Permission**: The AI must NEVER commit or push code to Git without explicitly asking the user for permission first.
 - **Industry Best Practices**: The AI must use and explain modern design patterns (e.g., repository pattern, dependency injection, middleware) rather than taking quick-and-dirty shortcuts. Code should be clean, modular, and testable from the start.
-
+- **Self-Critique & Anti-Patterns**: The AI must actively scan for Tech Debt, circular dependencies, and duplicate code logic before proposing any feature implementation, and explicitly ask the User if they would like to abstract the anti-pattern before moving forward.
+- **Plan Updating**: The AI must update the plan as we go, including checking off items from the checklist below, and explicitly ask the User if they would like to update the plan before moving forward.
 ---
 
 ## Auth + Storage Pattern
@@ -175,13 +177,14 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [x] **CI/CD:** Set up GitHub Actions on `main` to run Ruff (linting) and pytest, then deploy to Render
 
 ### Phase 2 — SvelteKit Frontend (Familiar Territory)
-- [ ] **Branching:** Create branch `feat/svelte-web` from `main`
-- [ ] **Setup:** Initialize SvelteKit with TypeScript and Tailwind
-- [ ] **State:** Use Svelte 5 runes + stores for the calculator state
-- [ ] **Offline/Local:** Implement `localStorage` persistence for anonymous users
+- [x] **Branching:** Create branch `feat/svelte-web` from `main`
+- [x] **Setup:** Initialize SvelteKit with TypeScript and Tailwind v4 (learning the new `@theme` CSS block rather than `tailwind.config.js`)
+- [x] **State:** Manage global calculator state strictly using **Svelte 5 Runes** (`$state`, `$derived`), abandoning all legacy Svelte 4 `$store` syntax
+- [x] **Type Sync:** Auto-generate Svelte TypeScript types AND Zod schemas (using `openapi-zod-client` or similar) from the FastAPI `openapi.json` so frontend/backend stay 100% concurrent.
+- [x] **Offline/Local:** Implement `localStorage` persistence for anonymous users
 - [ ] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
-- [ ] **Type Sync:** Write a script using `openapi-typescript` to auto-generate Svelte TypeScript types from the FastAPI `openapi.json`
-- [ ] **Validation:** Add **Zod** to validate form inputs before sending to API
+- [x] **Feature:** "Featured Metric" Option - Allow user to toggle their preferred metric (e.g. IPF GL instead of DOTS) globally.
+- [x] **Validation:** Add **Zod** to validate form inputs before sending to API
 - [ ] **Testing:** Write your first **Playwright** E2E test (e.g., "User can calculate Wilks without logging in")
 - [ ] **Merge:** Open PR, merge `feat/svelte-web` into `main`
 - [ ] **Deploy:** Push `main` to Vercel (zero-config) and test the live FastAPI connection
@@ -220,6 +223,14 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [ ] **Accessibility:** Add `axe-core` to your Playwright tests to catch missing labels and bad contrast
 - [ ] **Release:** Set up `release-please` for automated semantic versioning and CHANGELOG generation based on your conventional commits
 - [ ] **Merge:** PR and merge into `main`. Watch `release-please` automatically tag `v1.0.0`
+
+### Phase 7 — Cross-Stack Feature Deploy (The Masterclass)
+- [ ] **Branching:** Create branch `feat/pr-graphs`
+- [ ] **Backend:** Update the database and API endpoints to support retrieving historical data specifically for graphing (aggregate data over time).
+- [ ] **SvelteKit:** Build a `/pr-graphs` page with a beautiful interactive chart using a library like Chart.js or LayerChart.
+- [ ] **React Native:** Implement the matching logic using `react-native-chart-kit` or Skia graphs to achieve a native feel.
+- [ ] **Flutter:** Replicate the exact visual layout and graphing logic using Flutter's `fl_chart`.
+- [ ] **Merge:** This final phase gives you a true understanding of deploying a major, data-driven feature update across multiple completely segregated mono-repo architectures simultaneously!
 
 ---
 
