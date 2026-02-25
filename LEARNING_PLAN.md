@@ -15,6 +15,7 @@ Calculate and track Wilks, DOTS, IPF GL, and Reshel scores based on bodyweight, 
 ## AI Collaboration Guidelines
 - **Explain Everything**: The AI must explain *what* commands it runs, *how* tools work under the hood (like SSH, WSL, or networking), and *why* specific approaches are chosen. No "black box" magic. The goal is deep understanding.
 - **Explicit Permission**: The AI must NEVER commit or push code to Git without explicitly asking the user for permission first.
+- **Industry Best Practices**: The AI must use and explain modern design patterns (e.g., repository pattern, dependency injection, middleware) rather than taking quick-and-dirty shortcuts. Code should be clean, modular, and testable from the start.
 
 ---
 
@@ -159,16 +160,19 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [x] **DX:** Add Prettier/ESLint configs for JS/TS, Ruff for Python
 
 ### Phase 1 — FastAPI Backend (The Foundation)
-- [ ] **Branching:** Create branch `feat/fastapi-core` from `main`
-- [ ] **Core:** Implement endpoints based on your OpenAPI spec
-- [ ] **Validation:** Use **Pydantic v2** for robust request/response validation
-- [ ] **Auth:** Verify Supabase JWTs in middleware to protect the history endpoints
-- [ ] **Documentation:** Explore the auto-generated Swagger UI at `/docs`
-- [ ] **Security:** Configure CORS properly so the web frontends can call it
-- [ ] **Containerization:** Write a `Dockerfile` using `uv` to build the API
-- [ ] **Commit:** Use conventional commits (e.g., `feat: add calculate endpoint`, `chore: add dockerfile`)
-- [ ] **Merge:** Open a Pull Request, review your own diff, merge `feat/fastapi-core` into `main`
-- [ ] **CI/CD:** Set up GitHub Actions on `main` to run Ruff (linting) and pytest, then deploy to Render
+- [x] **Branching:** Create branch `feat/fastapi-init` from `main`
+- [x] **Architecture:** Build nested `README.md` and `Makefile`, then organize files into `/routes`, `/models`, and `/services`
+- [x] **Core:** Implement `POST`, `GET`, and `DELETE` /lifts endpoints based on your OpenAPI spec
+- [x] **Validation:** Use **Pydantic v2** for robust request/response validation
+- [x] **Logic:** Implement all 4 powerlifting formulas (Wilks, DOTS, IPF GL, Reshel) into `formulas.py`
+- [x] **Database:** Configure `supabase` with `.env` and write the insertion/retrieval row logic
+- [x] **Auth:** Verify Supabase JWTs in middleware to protect the history endpoints
+- [x] **Documentation:** Explore the auto-generated Swagger UI at `/docs`
+- [x] **Security:** Configure CORS properly so the web frontends can call it
+- [x] **Containerization:** Write a `Dockerfile` using `uv` to build the API
+- [x] **Commit:** Use conventional commits (e.g., `feat: add calculate endpoint`, `chore: add dockerfile`)
+- [x] **Merge:** Open a Pull Request, review your own diff, merge into `main`
+- [x] **CI/CD:** Set up GitHub Actions on `main` to run Ruff (linting) and pytest, then deploy to Render
 
 ### Phase 2 — SvelteKit Frontend (Familiar Territory)
 - [ ] **Branching:** Create branch `feat/svelte-web` from `main`

@@ -1,0 +1,20 @@
+# Render Infrastructure as Code Blueprint
+# This file automatically tells Render how to deploy our FastAPI Container
+services:
+  - type: web
+    name: polyglot-fastapi
+    env: docker
+    region: ohio
+    plan: free
+    branch: main
+    # Point Render to our backend directory to build the Dockerfile
+    dockerContext: ./backends/fastapi
+    dockerfilePath: ./backends/fastapi/Dockerfile
+    # Automatically deploy when code is pushed to main
+    autoDeploy: true
+    envVars:
+      # These values must be manually entered into the Render Dashboard securely
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
