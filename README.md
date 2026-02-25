@@ -52,10 +52,6 @@ You can develop directly on your host machine without WSL or Docker.
 2. Install Python 3.12+ and `uv`.
 3. Clone the repository and run `pnpm install` at the root.
 
----
-
----
-
 ## Developer Experience (DX)
 
 We maintain unified code formatting across all languages in this repository using global configuration files:

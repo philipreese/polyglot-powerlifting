@@ -176,8 +176,8 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [x] **CI/CD:** Set up GitHub Actions on `main` to run Ruff (linting) and pytest, then deploy to Render
 
 ### Phase 2 — SvelteKit Frontend (Familiar Territory)
-- [ ] **Branching:** Create branch `feat/svelte-web` from `main`
-- [ ] **Setup:** Initialize SvelteKit with TypeScript and Tailwind
+- [x] **Branching:** Create branch `feat/svelte-web` from `main`
+- [x] **Setup:** Initialize SvelteKit with TypeScript and Tailwind
 - [ ] **State:** Use Svelte 5 runes + stores for the calculator state
 - [ ] **Offline/Local:** Implement `localStorage` persistence for anonymous users
 - [ ] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
