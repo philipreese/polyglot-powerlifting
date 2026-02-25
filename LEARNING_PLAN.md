@@ -177,8 +177,8 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 
 ### Phase 2 — SvelteKit Frontend (Familiar Territory)
 - [x] **Branching:** Create branch `feat/svelte-web` from `main`
-- [x] **Setup:** Initialize SvelteKit with TypeScript and Tailwind
-- [ ] **State:** Use Svelte 5 runes + stores for the calculator state
+- [x] **Setup:** Initialize SvelteKit with TypeScript and Tailwind v4 (learning the new `@theme` CSS block rather than `tailwind.config.js`)
+- [ ] **State:** Manage global calculator state strictly using **Svelte 5 Runes** (`$state`, `$derived`), abandoning all legacy Svelte 4 `$store` syntax
 - [ ] **Offline/Local:** Implement `localStorage` persistence for anonymous users
 - [ ] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
 - [ ] **Type Sync:** Write a script using `openapi-typescript` to auto-generate Svelte TypeScript types from the FastAPI `openapi.json`
