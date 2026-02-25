@@ -1,37 +1,30 @@
-export function createCalculatorState() {
-    let bodyweight = $state(80.0);
-    let squat = $state(0.0);
-    let bench = $state(0.0);
-    let deadlift = $state(0.0);
-    let gender = $state<'male' | 'female'>('male');
-    let equipment = $state<'raw' | 'single-ply' | 'multi-ply'>('raw');
-    
-    // Derived values
-    let total = $derived(squat + bench + deadlift);
-    
-    return {
-        get bodyweight() { return bodyweight },
-        set bodyweight(v) { bodyweight = v },
-        
-        get squat() { return squat },
-        set squat(v) { squat = v },
-        
-        get bench() { return bench },
-        set bench(v) { bench = v },
-        
-        get deadlift() { return deadlift },
-        set deadlift(v) { deadlift = v },
-        
-        get gender() { return gender },
-        set gender(v) { gender = v },
-        
-        get equipment() { return equipment },
-        set equipment(v) { equipment = v },
-        
-        // Read-only derived properties
-        get total() { return total }
+import { setContext, getContext } from 'svelte';
+
+export class CalculatorState {
+    bodyweight = $state(80.0);
+    squat = $state(0.0);
+    bench = $state(0.0);
+    deadlift = $state(0.0);
+    gender = $state<'male' | 'female'>('male');
+    equipment = $state<'raw' | 'single-ply' | 'multi-ply'>('raw');
+
+    // Derived values using native JS getters
+    get total() {
+        return this.squat + this.bench + this.deadlift;
     }
 }
 
-// A global singleton instance for the app to share
-export const calculatorState = createCalculatorState();
+// SVELTEKIT SSR SAFETY PATTERN:
+// Instead of exporting a global `const state = new CalculatorState()` which would break
+// and leak data between users on the server, we use Svelte's Context API.
+const STATE_KEY = Symbol('CALCULATOR_STATE');
+
+export function initCalculatorState() {
+    const state = new CalculatorState();
+    setContext(STATE_KEY, state);
+    return state;
+}
+
+export function getCalculatorState() {
+    return getContext<CalculatorState>(STATE_KEY);
+}
