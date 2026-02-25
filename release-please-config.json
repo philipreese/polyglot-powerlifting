@@ -2,6 +2,9 @@
   "packages": {
     ".": {
       "release-type": "simple"
+    },
+    "backends/fastapi": {
+      "release-type": "python"
     }
   }
 }
