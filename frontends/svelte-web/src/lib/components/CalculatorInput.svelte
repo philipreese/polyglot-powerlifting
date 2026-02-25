@@ -68,6 +68,25 @@
   
   <div class="pt-4 border-t border-slate-200 dark:border-slate-700 flex justify-between items-center">
     <span class="text-sm font-medium text-slate-500 dark:text-slate-400">Total</span>
-    <span class="text-2xl font-heading font-bold text-brand-primary">{state.total} <span class="text-sm font-normal text-slate-500">kg</span></span>
+    <span class="text-2xl font-heading font-bold text-brand-primary dark:text-brand-primary">{state.total} <span class="text-sm font-normal text-slate-500">kg</span></span>
   </div>
+
+  {#if state.error}
+    <div class="p-3 bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-400 rounded-lg text-sm font-medium">
+      {state.error}
+    </div>
+  {/if}
+
+  <button 
+    onclick={() => state.calculate()} 
+    disabled={state.isLoading}
+    class="w-full py-3 bg-brand-primary hover:bg-brand-primary/90 text-white font-medium rounded-lg transition-colors flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-brand-primary dark:focus-visible:ring-offset-slate-800"
+  >
+    {#if state.isLoading}
+      <span class="w-5 h-5 border-2 border-white/20 border-t-white rounded-full animate-spin"></span>
+      Calculating...
+    {:else}
+      Calculate Scores
+    {/if}
+  </button>
 </Card>

@@ -1,7 +1,7 @@
 <script lang="ts">
   import CalculatorInput from '$lib/components/CalculatorInput.svelte';
+  import CalculatorResults from '$lib/components/CalculatorResults.svelte';
   import ThemeToggle from '$lib/components/ThemeToggle.svelte';
-  import Card from '$lib/components/ui/Card.svelte';
 </script>
 
 <div class="min-h-screen p-4 md:p-8">
@@ -23,12 +23,9 @@
         <CalculatorInput />
       </section>
 
-      <!-- Right Column: Results (Future Phase) -->
+      <!-- Right Column: Results -->
       <section>
-        <Card class="h-full flex flex-col items-center justify-center text-slate-400 dark:text-slate-500">
-          <p class="font-medium">Calculation Results</p>
-          <p class="text-sm">Scores will appear here...</p>
-        </Card>
+        <CalculatorResults />
       </section>
 
     </main>

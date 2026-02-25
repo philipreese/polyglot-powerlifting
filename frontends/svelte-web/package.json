@@ -24,6 +24,7 @@
 		"vite": "^7.3.1"
 	},
 	"dependencies": {
-		"mode-watcher": "^1.1.0"
+		"mode-watcher": "^1.1.0",
+		"zod": "^4.3.6"
 	}
 }

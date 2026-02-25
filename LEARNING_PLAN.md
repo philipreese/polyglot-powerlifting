@@ -178,11 +178,11 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 ### Phase 2 — SvelteKit Frontend (Familiar Territory)
 - [x] **Branching:** Create branch `feat/svelte-web` from `main`
 - [x] **Setup:** Initialize SvelteKit with TypeScript and Tailwind v4 (learning the new `@theme` CSS block rather than `tailwind.config.js`)
-- [ ] **State:** Manage global calculator state strictly using **Svelte 5 Runes** (`$state`, `$derived`), abandoning all legacy Svelte 4 `$store` syntax
+- [x] **State:** Manage global calculator state strictly using **Svelte 5 Runes** (`$state`, `$derived`), abandoning all legacy Svelte 4 `$store` syntax
+- [ ] **Type Sync:** Auto-generate Svelte TypeScript types AND Zod schemas (using `openapi-zod-client` or similar) from the FastAPI `openapi.json` so frontend/backend stay 100% concurrent.
 - [ ] **Offline/Local:** Implement `localStorage` persistence for anonymous users
 - [ ] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
-- [ ] **Type Sync:** Write a script using `openapi-typescript` to auto-generate Svelte TypeScript types from the FastAPI `openapi.json`
-- [ ] **Validation:** Add **Zod** to validate form inputs before sending to API
+- [x] **Validation:** Add **Zod** to validate form inputs before sending to API
 - [ ] **Testing:** Write your first **Playwright** E2E test (e.g., "User can calculate Wilks without logging in")
 - [ ] **Merge:** Open PR, merge `feat/svelte-web` into `main`
 - [ ] **Deploy:** Push `main` to Vercel (zero-config) and test the live FastAPI connection
