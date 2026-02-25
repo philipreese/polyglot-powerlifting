@@ -31,4 +31,14 @@
     --color-text-primary: #F8FAFC;
     --color-brand-primary: #818CF8;
   }
+
+  /* 3. Hide bare HTML up/down spin buttons on number inputs globally */
+  input[type="number"]::-webkit-inner-spin-button,
+  input[type="number"]::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+  input[type="number"] {
+    -moz-appearance: textfield; /* Firefox */
+  }
 }

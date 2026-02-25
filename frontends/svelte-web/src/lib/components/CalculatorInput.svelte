@@ -14,22 +14,20 @@
   <h2 class="text-xl font-heading font-semibold text-slate-900 dark:text-white">Lifter Profile</h2>
   
   <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-    <Select id="gender" label="Gender" bind:value={state.gender}>
-      <option value="male">Male</option>
-      <option value="female">Female</option>
-    </Select>
+    <Select id="gender" label="Gender" bind:value={state.gender} options={[
+      { value: 'male', label: 'Male' },
+      { value: 'female', label: 'Female' }
+    ]} />
 
-    <Select id="equipment" label="Equipment" bind:value={state.equipment}>
-      <option value="raw">Raw</option>
-      <option value="single-ply">Single-ply</option>
-      <option value="multi-ply">Multi-ply</option>
-    </Select>
+    <Select id="equipment" label="Equipment" bind:value={state.equipment} options={[
+      { value: 'raw', label: 'Raw' },
+      { value: 'single-ply', label: 'Single-ply' },
+      { value: 'multi-ply', label: 'Multi-ply' }
+    ]} />
 
-    <Select id="preferredMetric" label="Preferred Metric" bind:value={state.preferredMetric}>
-      {#each Object.values(METRIC_CONFIG) as metric}
-        <option value={metric.key}>{metric.label}</option>
-      {/each}
-    </Select>
+    <Select id="preferredMetric" label="Preferred Metric" bind:value={state.preferredMetric} options={
+      Object.values(METRIC_CONFIG).map(m => ({ value: m.key, label: m.label }))
+    } />
   </div>
 
   {#if typeof window !== 'undefined'}
@@ -48,7 +46,7 @@
       bind:value={state.bodyweight} 
     />
 
-    <div class="grid grid-cols-3 gap-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
       <Input 
         id="squat" 
         label="Squat" 

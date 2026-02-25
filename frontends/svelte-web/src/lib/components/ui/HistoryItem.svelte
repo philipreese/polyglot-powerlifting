@@ -55,15 +55,15 @@
   </div>
 
   <div class="flex flex-col gap-3">
-     <div class="flex items-center justify-between pr-14">
-       <span class="text-2xl font-heading font-bold {isFeatured ? 'text-amber-600 dark:text-amber-500' : 'text-brand-primary'}">
+     <div class="flex flex-wrap items-start justify-between gap-x-4 gap-y-1 pr-12">
+       <span class="text-2xl font-heading font-bold whitespace-nowrap {isFeatured ? 'text-amber-600 dark:text-amber-500' : 'text-brand-primary'}">
          {record[primaryMetric.key as MetricKey]?.toFixed(2) || '--'} 
-         <span class="text-sm font-normal text-slate-500 dark:text-slate-400">{primaryMetric.label}</span>
+         <span class="text-sm font-normal text-slate-500 dark:text-slate-400 ml-1">{primaryMetric.label}</span>
        </span>
-       <span class="text-sm text-slate-500">{formatDate(record.created_at)}</span>
+       <span class="text-sm text-slate-500 mt-1">{formatDate(record.created_at)}</span>
      </div>
 
-     <div class="grid grid-cols-4 gap-2 border-t {isFeatured ? 'border-amber-200 dark:border-amber-800/50' : 'border-slate-200 dark:border-slate-700'} pt-3">
+     <div class="grid grid-cols-2 lg:grid-cols-4 gap-2 border-t {isFeatured ? 'border-amber-200 dark:border-amber-800/50' : 'border-slate-200 dark:border-slate-700'} pt-3">
         {#snippet metric(label: string, value: string | number)}
           <div>
             <div class="text-[10px] uppercase font-bold text-slate-400">{label}</div>
