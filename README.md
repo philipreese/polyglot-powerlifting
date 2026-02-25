@@ -1,6 +1,11 @@
 # Polyglot Powerlifting
 
-A multi-language powerlifting coefficient calculator building upon SvelteKit, FastAPI, Next.js, React Native, and Flutter.
+A multi-frontend powerlifting coefficient calculator built to learn the modern polyglot stack.
+
+*   [**Learning Plan**](./LEARNING_PLAN.md) - The roadmap and architecture for this project.
+*   [**API Specification**](./spec/coefficients.md) - The math and coefficients required for the backend.
+*   [**Database Schema**](./spec/schema.sql) - The Supabase PostgreSQL initialization script.
+*   [**Branding Guide**](./docs/branding.md) - The typography, colors, and styling rules for all frontends.
 
 ## Project Structure
 
