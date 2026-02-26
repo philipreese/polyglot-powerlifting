@@ -6,6 +6,10 @@ from services.db import supabase
 
 security = HTTPBearer(auto_error=False) # auto_error=False allows optional auth
 
+async def get_token(credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)) -> Optional[str]:
+    """Extracts the raw JWT string."""
+    return credentials.credentials if credentials else None
+
 async def get_current_user(credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)) -> Optional[str]:
     """
     FastAPI Dependency that extracts the JWT from the header, 

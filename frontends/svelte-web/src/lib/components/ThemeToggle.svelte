@@ -2,7 +2,7 @@
   import { mode, setMode, userPrefersMode } from "mode-watcher";
   import { Moon, Sun, Monitor } from "lucide-svelte";
 
-  const baseBtnClass = "p-2 rounded-md transition-all outline-none focus-visible:ring-2 focus-visible:ring-brand-primary";
+  const baseBtnClass = "p-2 rounded-md transition-all outline-none focus-visible:ring-2 focus-visible:ring-brand-primary cursor-pointer";
   const activeClass = "bg-white dark:bg-slate-700 shadow-sm text-brand-primary dark:text-white";
   const inactiveClass = "text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-200";
 </script>

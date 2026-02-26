@@ -182,11 +182,11 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [x] **State:** Manage global calculator state strictly using **Svelte 5 Runes** (`$state`, `$derived`), abandoning all legacy Svelte 4 `$store` syntax
 - [x] **Type Sync:** Auto-generate Svelte TypeScript types AND Zod schemas (using `openapi-zod-client` or similar) from the FastAPI `openapi.json` so frontend/backend stay 100% concurrent.
 - [x] **Offline/Local:** Implement `localStorage` persistence for anonymous users
-- [ ] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
+- [x] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
 - [x] **Feature:** "Featured Metric" Option - Allow user to toggle their preferred metric (e.g. IPF GL instead of DOTS) globally.
 - [x] **Validation:** Add **Zod** to validate form inputs before sending to API
 - [ ] **Testing:** Write your first **Playwright** E2E test (e.g., "User can calculate Wilks without logging in")
-- [ ] **Merge:** Open PR, merge `feat/svelte-web` into `main`
+- [x] **Merge:** Open PR, merge `feat/svelte-web` into `main`
 - [ ] **Deploy:** Push `main` to Vercel (zero-config) and test the live FastAPI connection
 
 ### Phase 3 — Next.js Backend (The Swap)
