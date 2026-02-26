@@ -1,42 +1,47 @@
-# sv
+# Polyglot Powerlifting Frontend (Sveltekit)
 
-Everything you need to build a Svelte project, powered by [`sv`](https://github.com/sveltejs/cli).
+A high-performance coefficients calculator built with **Svelte 5** and **TypeScript**, following a Feature-Sliced architecture.
 
-## Creating a project
+## 🚀 Key Features
+- **Svelte 5 Runes**: Modern state management using `$state`, `$derived`, and `$effect`.
+- **Feature-Sliced Architecture**: Organized by domain (calculator, history, auth) for maximum scalability.
+- **Offline-First Sync**: Anonymous calculations are persisted to `localStorage` and synchronized to the cloud upon login.
+- **Type-Safe API**: End-to-end safety via Zodios and OpenAPI schema generation.
 
-If you're seeing this, you've probably already done this step. Congrats!
+## 🛠️ Setup & Development
 
-```sh
-# create a new project
-npx sv create my-app
+### 1. Environment Variables
+Copy the example file and configure your Supabase instance:
+```bash
+cp .env.example .env
+```
+Ensure you use the standardized names:
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
+
+### 2. Dependencies
+```bash
+pnpm install
 ```
 
-To recreate this project with the same configuration:
-
-```sh
-# recreate this project
-npx sv create --template minimal --types ts --no-install frontends/svelte-web
+### 3. Local Development
+```bash
+pnpm run dev
 ```
 
-## Developing
-
-Once you've created a project and installed dependencies with `npm install` (or `pnpm install` or `yarn`), start a development server:
-
-```sh
-npm run dev
-
-# or start the server and open the app in a new browser tab
-npm run dev -- --open
+### 4. Code Generation
+If the backend API changes, update the frontend types using:
+```bash
+# From the root directory
+make gen-types
 ```
 
-## Building
+## 🧪 Testing
+We maintain high quality through a mix of unit and E2E tests:
+- **Unit (Vitest)**: `pnpm run test:unit`
+- **E2E (Playwright)**: `pnpm run test:e2e`
 
-To create a production version of your app:
-
-```sh
-npm run build
-```
-
-You can preview the production build with `npm run preview`.
-
-> To deploy your app, you may need to install an [adapter](https://svelte.dev/docs/kit/adapters) for your target environment.
+## 🏗️ Architecture
+- `/src/lib/features`: Encapsulated domain logic.
+- `/src/lib/core`: Shared infrastructure (API client, Supabase init).
+- `/src/lib/components/ui`: Reusable, atomic UI components.
