@@ -2,7 +2,7 @@ from typing import List, Optional
 from uuid import UUID
 
 from fastapi import APIRouter, Depends, HTTPException
-from middleware.auth import get_current_user, require_current_user, get_token
+from middleware.auth import get_current_user, get_token, require_current_user
 from models.schemas import LiftRequest, LiftResponse
 from repositories.lifts import LiftsRepository
 from services.formulas import calculate_dots, calculate_ipf_gl, calculate_reshel, calculate_wilks

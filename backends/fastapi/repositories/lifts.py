@@ -2,7 +2,7 @@ from typing import List, Optional
 from uuid import UUID
 
 from models.schemas import LiftResponse
-from services.db import supabase, get_auth_client
+from services.db import get_auth_client, supabase
 
 
 class LiftsRepository:
@@ -63,5 +63,5 @@ class LiftsRepository:
         
         # We must include a filter on user_id to prevent destroying other users' data.
         # But Supabase requires an equality check for deletes
-        res = client.table("lifts").delete().eq("user_id", user_id).execute()
+        _ = client.table("lifts").delete().eq("user_id", user_id).execute()
         return True
