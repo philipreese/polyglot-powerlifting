@@ -7,13 +7,16 @@ vi.mock('$lib/services/api', () => ({
     ApiService: {
         getHistory: vi.fn().mockResolvedValue([]),
         calculateScores: vi.fn(),
-        syncLocalLifts: vi.fn().mockResolvedValue(true)
+        syncLocalLifts: vi.fn().mockResolvedValue(true),
+        deleteHistoryRecord: vi.fn(),
+        clearHistory: vi.fn()
     }
 }));
 
-// Mock the Auth State to simulate being logged OUT by default
+// Mock the Auth State to simulate being logged OUT by default, but allow overrides
+let mockUser: any = null;
 vi.mock('$lib/state/auth.svelte', () => ({
-    getAuth: () => ({ user: null })
+    getAuth: () => ({ get user() { return mockUser; } })
 }));
 
 describe('CalculatorState (Svelte 5 Runes)', () => {
@@ -23,6 +26,7 @@ describe('CalculatorState (Svelte 5 Runes)', () => {
         // Reset local storage
         localStorage.clear();
         vi.clearAllMocks();
+        mockUser = null;
         
         state = new CalculatorState();
     });
@@ -100,5 +104,56 @@ describe('CalculatorState (Svelte 5 Runes)', () => {
         const stored = JSON.parse(localStorage.getItem('anonymous_lifts_history') || '[]');
         expect(stored.length).toBe(1);
         expect(stored[0].wilks).toBe(400.5);
+    });
+
+    it('deletes history record from local storage if anonymous', async () => {
+        state.history = [{ id: '999', wilks: 123 } as any];
+        await state.deleteHistoryRecord('999');
+        
+        expect(state.history.length).toBe(0);
+        // Ensure remote wasn't called
+        expect(ApiService.deleteHistoryRecord).not.toHaveBeenCalled();
+    });
+
+    it('deletes history record remotely if authenticated', async () => {
+        mockUser = { id: 'uuid-123' };
+        state.history = [{ id: '999', wilks: 123 } as any];
+        (ApiService.deleteHistoryRecord as any).mockResolvedValueOnce(true);
+
+        await state.deleteHistoryRecord('999');
+        
+        expect(ApiService.deleteHistoryRecord).toHaveBeenCalledWith('999');
+        expect(state.history.length).toBe(0);
+    });
+
+    it('clears all history remotely if authenticated', async () => {
+        mockUser = { id: 'uuid-123' };
+        state.history = [{ id: '999' } as any];
+        (ApiService.clearHistory as any).mockResolvedValueOnce(true);
+
+        await state.clearHistory();
+        
+        expect(ApiService.clearHistory).toHaveBeenCalled();
+        expect(state.history.length).toBe(0);
+    });
+
+    it('confirms sync pushes local storage to cloud and clears memory buffer', async () => {
+        mockUser = { id: 'uuid-123' };
+        const mockHistory = [{ id: 'offline-record' }];
+        localStorage.setItem('anonymous_lifts_history', JSON.stringify(mockHistory));
+        
+        await state.confirmSync();
+
+        expect(ApiService.syncLocalLifts).toHaveBeenCalledWith(mockHistory);
+        expect(localStorage.getItem('anonymous_lifts_history')).toBeNull();
+        expect(state.isSyncing).toBe(false);
+        expect(state.showSyncPrompt).toBe(false);
+    });
+
+    it('dismiss sync wipes local storage buffer early', () => {
+        localStorage.setItem('anonymous_lifts_history', JSON.stringify([{ id: 'a' }]));
+        state.dismissSync();
+        expect(localStorage.getItem('anonymous_lifts_history')).toBeNull();
+        expect(state.showSyncPrompt).toBe(false);
     });
 });

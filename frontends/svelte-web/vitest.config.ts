@@ -13,5 +13,8 @@ export default defineConfig({
 			include: ['src/lib/**/*.{js,ts,svelte}'],
 			exclude: ['src/lib/schemas/**']
 		}
+	},
+	resolve: {
+		conditions: ['browser']
 	}
 });
