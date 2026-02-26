@@ -185,9 +185,10 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [x] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
 - [x] **Feature:** "Featured Metric" Option - Allow user to toggle their preferred metric (e.g. IPF GL instead of DOTS) globally.
 - [x] **Validation:** Add **Zod** to validate form inputs before sending to API
-- [x] **Testing:** Write your first **Playwright** E2E test (e.g., "User can calculate Wilks without logging in")
+- [ ] **Tests (Unit):** Set up **Vitest** for perfect component and business logic function coverage
+- [x] **Tests (E2E):** Write your first **Playwright** E2E test (e.g., "User can calculate Wilks without logging in")
 - [x] **Merge:** Open PR, merge `feat/svelte-web` into `main`
-- [ ] **Deploy:** Push `main` to Vercel (zero-config) and test the live FastAPI connection
+- [x] **Deploy:** Push `main` to Vercel (zero-config) and test the live FastAPI connection
 
 ### Phase 3 — Next.js Backend (The Swap)
 - [ ] **Branching:** Create branch `feat/nextjs-api`
