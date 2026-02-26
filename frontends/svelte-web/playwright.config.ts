@@ -4,7 +4,6 @@ export default defineConfig({
 	webServer: {
 		command: 'pnpm run build && pnpm run preview',
 		port: 4173,
-		// @ts-expect-error - process is injected by Node
 		reuseExistingServer: !process.env.CI
 	},
 	testDir: 'tests',
