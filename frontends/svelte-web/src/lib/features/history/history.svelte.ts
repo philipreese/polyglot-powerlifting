@@ -98,11 +98,16 @@ export class HistoryState {
     }
 
     addRecordToHistory(record: LiftResponse) {
+        // Defensive check against duplicates (prevents Svelte crash)
+        if (record.id && this.history.some(r => r.id === record.id)) return;
+        
         this.history = [record, ...this.history];
         this._persistStateLocallyIfAnonymous();
     }
 
-    async deleteHistoryRecord(id: string) {
+    async deleteHistoryRecord(id: string | null | undefined) {
+        if (!id) return;
+
         if (getAuth().user) {
             const success = await ApiService.deleteHistoryRecord(id);
             if (!success) {

@@ -89,7 +89,7 @@
   {:else}
     <!-- Grid format handles width much better than pure list -->
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-      {#each displayedHistory as record (record.id)}
+      {#each displayedHistory as record, i (record.id ?? `local-${i}`)}
         <HistoryItem 
           {record} 
           onDelete={(id) => state.deleteHistoryRecord(id)}
