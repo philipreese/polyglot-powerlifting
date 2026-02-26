@@ -1,13 +1,11 @@
 from typing import List, Optional
 from uuid import UUID
 
+from fastapi import Depends
 from models.schemas import LiftRequest, LiftResponse
-from repositories.lifts import LiftsRepository
+from repositories.lifts import LiftsRepository, get_lifts_repository
 from services.formulas import calculate_dots, calculate_ipf_gl, calculate_reshel, calculate_wilks
 
-
-from fastapi import Depends
-from repositories.lifts import LiftsRepository, get_lifts_repository
 
 class LiftsService:
     def __init__(self, lifts_repo: LiftsRepository):

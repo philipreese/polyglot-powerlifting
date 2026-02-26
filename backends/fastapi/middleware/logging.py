@@ -1,8 +1,9 @@
-import logging
 import sys
+
 import structlog
-from fastapi import FastAPI, Request
+from fastapi import Request
 from fastapi.responses import JSONResponse
+
 
 class DomainException(Exception):
     """Base class for all application-specific exceptions."""

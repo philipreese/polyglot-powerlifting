@@ -3,8 +3,9 @@ from unittest.mock import MagicMock
 from uuid import UUID
 
 from models.schemas import LiftRequest, LiftResponse
-from services.lifts import LiftsService
 from repositories.lifts import LiftsRepository
+from services.lifts import LiftsService
+
 
 class TestLiftsService(unittest.TestCase):
     def setUp(self):

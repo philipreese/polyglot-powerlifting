@@ -1,6 +1,11 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
-from middleware.logging import DomainException, domain_exception_handler, setup_logging, universal_exception_handler
+from middleware.logging import (
+    DomainException,
+    domain_exception_handler,
+    setup_logging,
+    universal_exception_handler,
+)
 from routes.lifts import router as lifts_router
 
 # Initialize structured logging

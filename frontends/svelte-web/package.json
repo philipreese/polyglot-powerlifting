@@ -10,7 +10,7 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"gen-types": "pnpm dlx openapi-zod-client http://localhost:8000/openapi.json -o src/lib/schemas/openapi.ts",
+		"gen-types": "pnpm dlx openapi-zod-client http://localhost:8000/openapi.json -o src/lib/core/schemas/openapi.ts",
 		"test:e2e": "playwright test",
 		"test:unit": "vitest run --coverage"
 	},

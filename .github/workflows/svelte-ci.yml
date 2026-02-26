@@ -56,8 +56,8 @@ jobs:
     - name: Run Svelte code checks
       run: pnpm run check
       env:
-        PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
-        PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
     - name: Install uv (for FastAPI)
       uses: astral-sh/setup-uv@v5
@@ -77,8 +77,8 @@ jobs:
       run: uv run fastapi dev main.py &
       working-directory: backends/fastapi
       env:
-        SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
-        SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
     - name: Run Playwright E2E tests
       run: pnpm run test:e2e
@@ -87,8 +87,8 @@ jobs:
         VITE_API_URL: http://localhost:8000
         # If your E2E tests rely heavily on Supabase, they will fail in CI unless you mock the requests 
         # or provide real DEV environment keys via GitHub Repository Secrets.
-        PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
-        PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+        SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
+        SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
 
     - name: Upload Playwright report
       uses: actions/upload-artifact@v4

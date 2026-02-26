@@ -23,4 +23,4 @@ web-test-unit:
 
 # Generates frontend TypeScript schemas based on the FastAPI OpenAPI spec
 gen-types:
-	cd frontends/svelte-web && npx pnpm run gen-types && npx prettier --write src/lib/schemas/openapi.ts
+	cd frontends/svelte-web && npx pnpm run gen-types && npx prettier --write src/lib/core/schemas/openapi.ts
