@@ -1,25 +1,18 @@
-import os
 from typing import Optional
 
-from dotenv import load_dotenv
+from config import settings
 from supabase import Client, create_client
 
-load_dotenv()
-
-url: str = os.environ.get("SUPABASE_URL", "")
-key: str = os.environ.get("SUPABASE_KEY", "")
-
-# We initialize the client if environment variables are present. 
+# Initialize the client if environment variables are present. 
 # If not, the app will still boot for local math-only calculations.
-if url and key:
-    supabase: Client = create_client(url, key)
-else:
-    supabase = None
+supabase: Optional[Client] = None
+if settings.is_supabase_configured:
+    supabase = create_client(settings.supabase_url, settings.supabase_anon_key)
 
 def get_auth_client(token: str) -> Optional[Client]:
     """Returns a new Supabase client perfectly scoped with the user's JWT for RLS."""
-    if not url or not key:
+    if not settings.is_supabase_configured:
         return None
     from supabase import ClientOptions
     options = ClientOptions(headers={'Authorization': f'Bearer {token}'})
-    return create_client(url, key, options=options)
+    return create_client(settings.supabase_url, settings.supabase_anon_key, options=options)

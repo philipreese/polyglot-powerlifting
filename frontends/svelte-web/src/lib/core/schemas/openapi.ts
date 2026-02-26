@@ -62,6 +62,7 @@ const endpoints = makeApi([
     method: 'get',
     path: '/lifts/',
     alias: 'get_lifts_lifts__get',
+    description: `Fetch all history for the authenticated user.`,
     requestFormat: 'json',
     response: z.array(LiftResponse)
   },
@@ -69,6 +70,7 @@ const endpoints = makeApi([
     method: 'post',
     path: '/lifts/',
     alias: 'create_lift_lifts__post',
+    description: `Calculate and optionally save a new lift.`,
     requestFormat: 'json',
     parameters: [
       {
@@ -98,6 +100,7 @@ const endpoints = makeApi([
     method: 'delete',
     path: '/lifts/:lift_id',
     alias: 'delete_lift_lifts__lift_id__delete',
+    description: `Delete a specific record.`,
     requestFormat: 'json',
     parameters: [
       {
