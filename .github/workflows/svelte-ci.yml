@@ -1,0 +1,99 @@
+name: Svelte Web CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'frontends/svelte-web/**'
+      - '.github/workflows/svelte-ci.yml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'frontends/svelte-web/**'
+      - '.github/workflows/svelte-ci.yml'
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+    
+    defaults:
+      run:
+        working-directory: frontends/svelte-web
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+        
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+        
+    - name: Get pnpm store directory
+      shell: bash
+      run: |
+        echo "STORE_PATH=$(pnpm store path --silent)" >> $GITHUB_ENV
+
+    - uses: actions/cache@v4
+      name: Setup pnpm cache
+      with:
+        path: ${{ env.STORE_PATH }}
+        key: ${{ runner.os }}-pnpm-store-${{ hashFiles('**/pnpm-lock.yaml') }}
+        restore-keys: |
+          ${{ runner.os }}-pnpm-store-
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Install Playwright Browsers
+      run: pnpm exec playwright install --with-deps
+
+    - name: Run Svelte code checks
+      run: pnpm run check
+      env:
+        PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+        PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+
+    - name: Install uv (for FastAPI)
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+        cache-dependency-glob: "backends/fastapi/uv.lock"
+
+    - name: Set up Python
+      run: uv python install
+      working-directory: backends/fastapi
+
+    - name: Install FastAPI dependencies
+      run: uv sync --all-extras --dev
+      working-directory: backends/fastapi
+
+    - name: Start FastAPI server in background
+      run: uv run fastapi dev main.py &
+      working-directory: backends/fastapi
+      env:
+        SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+
+    - name: Run Playwright E2E tests
+      run: pnpm run test:e2e
+      env:
+        # These are strictly for CI to run the local tests against its temporary build instance
+        VITE_API_URL: http://localhost:8000
+        # If your E2E tests rely heavily on Supabase, they will fail in CI unless you mock the requests 
+        # or provide real DEV environment keys via GitHub Repository Secrets.
+        PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+        PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+
+    - name: Upload Playwright report
+      uses: actions/upload-artifact@v4
+      if: always()
+      with:
+        name: playwright-report
+        path: frontends/svelte-web/playwright-report/
+        retention-days: 7

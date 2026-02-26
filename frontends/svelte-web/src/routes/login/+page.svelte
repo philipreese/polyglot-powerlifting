@@ -31,7 +31,7 @@
           await goto('/');
         } else {
           // If Supabase is configured to require email confirm
-          successMsg = 'Check your email to confirm your account!';
+          successMsg = 'Check your email to confirm your account';
         }
       } else {
         const { error: signInError } = await supabase.auth.signInWithPassword({

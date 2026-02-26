@@ -10,13 +10,16 @@
 		"prepare": "svelte-kit sync || echo ''",
 		"check": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json",
 		"check:watch": "svelte-kit sync && svelte-check --tsconfig ./tsconfig.json --watch",
-		"gen-types": "pnpm dlx openapi-zod-client http://localhost:8000/openapi.json -o src/lib/schemas/openapi.ts"
+		"gen-types": "pnpm dlx openapi-zod-client http://localhost:8000/openapi.json -o src/lib/schemas/openapi.ts",
+		"test:e2e": "playwright test"
 	},
 	"devDependencies": {
+		"@playwright/test": "^1.58.2",
 		"@sveltejs/adapter-auto": "^7.0.0",
 		"@sveltejs/kit": "^2.50.2",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@tailwindcss/vite": "^4.2.1",
+		"@types/node": "^25.3.1",
 		"lucide-svelte": "^0.575.0",
 		"prettier": "^3.8.1",
 		"prettier-plugin-svelte": "^3.5.0",
