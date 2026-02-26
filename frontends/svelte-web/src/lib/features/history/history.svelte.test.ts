@@ -9,10 +9,10 @@ vi.mock('$lib/features/auth/auth.svelte', () => ({
 
 vi.mock('$lib/core/services/api', () => ({
     ApiService: {
-        getHistory: vi.fn(),
-        syncLocalLifts: vi.fn(),
-        deleteHistoryRecord: vi.fn(),
-        clearHistory: vi.fn()
+        getHistory: vi.fn(() => Promise.resolve([])),
+        syncLocalLifts: vi.fn(() => Promise.resolve([])),
+        deleteHistoryRecord: vi.fn(() => Promise.resolve(true)),
+        clearHistory: vi.fn(() => Promise.resolve(true))
     }
 }));
 
@@ -49,24 +49,53 @@ describe('HistoryState', () => {
         localStorage.setItem('anonymous_lifts_history', JSON.stringify([{ id: '1' }]));
         
         const state = new HistoryState();
-        // Manually trigger handleLogin as effects don't run automatically in unit tests easily without more setup
+        // Manually trigger handleLogin
         await (state as any).handleLogin();
         
         expect(state.showSyncPrompt).toBe(true);
     });
 
-    it('confirms sync and clears local storage', async () => {
+    it('prevents sync and shows error when offline', async () => {
+        const state = new HistoryState();
+        state.isOnline = false;
+        state.showSyncPrompt = true;
+
+        await state.confirmSync();
+
+        expect(state.error).toContain('offline');
+        expect(ApiService.syncLocalLifts).not.toHaveBeenCalled();
+        expect(state.isSyncing).toBe(false);
+    });
+
+    it('retains local data and keeps prompt open on sync failure', async () => {
+        const localData = [{ id: 'local' }];
+        localStorage.setItem('anonymous_lifts_history', JSON.stringify(localData));
+        vi.mocked(getAuth).mockReturnValue({ user: { id: 'u1' } } as any);
+        vi.mocked(ApiService.syncLocalLifts).mockRejectedValueOnce(new Error('API Down'));
+
+        const state = new HistoryState();
+        state.isOnline = true;
+        await state.confirmSync();
+
+        expect(state.error).toBe('Sync Failed: API Down');
+        expect(localStorage.getItem('anonymous_lifts_history')).not.toBeNull();
+        expect(state.showSyncPrompt).toBe(true);
+    });
+
+    it('confirms sync, clears storage, and closes prompt on success', async () => {
         const localData = [{ id: 'local' }];
         localStorage.setItem('anonymous_lifts_history', JSON.stringify(localData));
         vi.mocked(getAuth).mockReturnValue({ user: { id: 'user1' } } as any);
         vi.mocked(ApiService.getHistory).mockResolvedValue([]);
 
         const state = new HistoryState();
+        state.isOnline = true;
         await state.confirmSync();
 
         expect(ApiService.syncLocalLifts).toHaveBeenCalledWith(localData);
         expect(localStorage.getItem('anonymous_lifts_history')).toBeNull();
         expect(state.showSyncPrompt).toBe(false);
+        expect(state.error).toBeNull();
     });
 
     it('dismisses sync and clears local storage', () => {

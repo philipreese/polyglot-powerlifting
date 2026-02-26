@@ -1,7 +1,7 @@
 import { setContext, getContext } from 'svelte';
 import { LiftSchema } from '$lib/core/schemas';
 import { ApiService } from '$lib/core/services/api';
-import type { HistoryState } from './history.svelte';
+import type { HistoryState } from '$lib/features/history';
 
 export class CalculatorFormState {
     bodyweight = $state(80.0);

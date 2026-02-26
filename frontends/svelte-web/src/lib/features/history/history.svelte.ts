@@ -6,11 +6,16 @@ import { ApiService } from '$lib/core/services/api';
 export class HistoryState {
     history = $state<LiftResponse[]>([]);
     showSyncPrompt = $state(false);
+    isOnline = $state(true);
     isSyncing = $state(false);
     error = $state<string | null>(null);
 
     constructor() {
         if (typeof window !== 'undefined') {
+            this.isOnline = window.navigator.onLine;
+            window.addEventListener('online', () => (this.isOnline = true));
+            window.addEventListener('offline', () => (this.isOnline = false));
+
             this.loadHistory();
             $effect.root(() => {
                 $effect(() => {
@@ -57,27 +62,37 @@ export class HistoryState {
     }
 
     async confirmSync() {
+        if (!this.isOnline) {
+            this.error = "Cannot sync while offline. Please check your connection.";
+            return;
+        }
+
         this.isSyncing = true;
+        this.error = null;
+        
         try {
             const stored = localStorage.getItem('anonymous_lifts_history');
             if (stored) {
                 const local = JSON.parse(stored);
                 if (local.length > 0) {
                     await ApiService.syncLocalLifts(local);
+                    // CRITICAL: Only clear local data AFTER server confirms success
                     localStorage.removeItem('anonymous_lifts_history');
+                    this.showSyncPrompt = false;
                 }
             }
         } catch (err: any) {
-            this.error = "Sync Failed: " + err.message;
+            // Keep the prompt open if it fails so users can retry
+            this.error = "Sync Failed: " + (err.message || "Unknown Error");
         } finally {
             this.isSyncing = false;
-            this.showSyncPrompt = false;
             this.loadHistory();
         }
     }
 
     dismissSync() {
         this.showSyncPrompt = false;
+        this.error = null;
         localStorage.removeItem('anonymous_lifts_history');
         this.loadHistory();
     }

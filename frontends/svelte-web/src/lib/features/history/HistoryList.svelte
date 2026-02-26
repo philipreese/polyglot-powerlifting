@@ -29,7 +29,15 @@
   {#if state.showSyncPrompt}
     <div class="bg-indigo-50 border border-indigo-200 dark:bg-indigo-900/20 dark:border-indigo-800 rounded-xl p-4 flex flex-col gap-3">
       <div class="flex justify-between items-start">
-        <h3 class="font-medium text-indigo-900 dark:text-indigo-200">Sync Offline History?</h3>
+        <h3 class="font-medium text-indigo-900 dark:text-indigo-200">
+          {#if !state.isOnline}
+            Offline - Sync Paused
+          {:else if state.error}
+            Sync Failed
+          {:else}
+            Sync Offline History?
+          {/if}
+        </h3>
         <button 
           class="text-indigo-400 hover:text-indigo-600 transition-colors cursor-pointer"
           onclick={() => state.dismissSync()}
@@ -39,16 +47,33 @@
           <svg xmlns="http://www.w3.org/2000/svg" class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 6 6 18"/><path d="m6 6 12 12"/></svg>
         </button>
       </div>
-      <p class="text-sm text-indigo-700 dark:text-indigo-300">
-        We found un-synced calculations saved on this device. Would you like to merge them into your account?
-      </p>
+
+      {#if state.error}
+        <p class="text-sm font-medium text-red-600 dark:text-red-400 bg-red-50 dark:bg-red-900/20 p-2 rounded-lg">
+          {state.error}
+        </p>
+      {:else}
+        <p class="text-sm text-indigo-700 dark:text-indigo-300">
+          {#if !state.isOnline}
+            We'll sync your {state.history.length} calculations as soon as you're back online.
+          {:else}
+            We found {state.history.length} un-synced calculations on this device. Merge them into your account?
+          {/if}
+        </p>
+      {/if}
+
       <button 
-        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg transition-colors cursor-pointer disabled:opacity-50"
+        class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-medium py-2 rounded-lg transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
         onclick={() => state.confirmSync()}
-        disabled={state.isSyncing}
+        disabled={state.isSyncing || !state.isOnline}
       >
         {#if state.isSyncing}
+          <span class="inline-block w-4 h-4 border-2 border-white/20 border-t-white rounded-full animate-spin mr-2"></span>
           Syncing...
+        {:else if !state.isOnline}
+          Waiting for Connection...
+        {:else if state.error}
+          Retry Sync
         {:else}
           Sync to Cloud
         {/if}
