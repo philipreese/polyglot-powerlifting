@@ -59,6 +59,27 @@ jobs:
         PUBLIC_SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
         PUBLIC_SUPABASE_ANON_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
 
+    - name: Install uv (for FastAPI)
+      uses: astral-sh/setup-uv@v5
+      with:
+        enable-cache: true
+        cache-dependency-glob: "backends/fastapi/uv.lock"
+
+    - name: Set up Python
+      run: uv python install
+      working-directory: backends/fastapi
+
+    - name: Install FastAPI dependencies
+      run: uv sync --all-extras --dev
+      working-directory: backends/fastapi
+
+    - name: Start FastAPI server in background
+      run: uv run fastapi dev main.py &
+      working-directory: backends/fastapi
+      env:
+        SUPABASE_URL: ${{ secrets.PUBLIC_SUPABASE_URL }}
+        SUPABASE_KEY: ${{ secrets.PUBLIC_SUPABASE_ANON_KEY }}
+
     - name: Run Playwright E2E tests
       run: pnpm run test:e2e
       env:
