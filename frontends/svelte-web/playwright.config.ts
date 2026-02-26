@@ -1,0 +1,22 @@
+import { defineConfig, devices } from '@playwright/test';
+
+export default defineConfig({
+	webServer: {
+		command: 'pnpm run build && pnpm run preview',
+		port: 4173,
+		// @ts-expect-error - process is injected by Node
+		reuseExistingServer: !process.env.CI
+	},
+	testDir: 'tests',
+	testMatch: /(.+\.)?(test|spec)\.[jt]s/,
+	projects: [
+		{
+			name: 'chromium',
+			use: { ...devices['Desktop Chrome'] }
+		}
+	],
+	use: {
+		baseURL: 'http://localhost:4173',
+		trace: 'on-first-retry'
+	}
+});
