@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { HistoryState } from './history.svelte';
+import { HistoryState } from './index';
 import { ApiService } from '$lib/core/services/api';
 import { getAuth } from '$lib/features/auth/auth.svelte';
 

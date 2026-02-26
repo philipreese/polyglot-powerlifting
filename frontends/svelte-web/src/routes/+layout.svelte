@@ -2,8 +2,8 @@
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { ModeWatcher } from 'mode-watcher';
-	import { initHistoryState } from '$lib/features/history/history.svelte';
-	import { initCalculatorFormState } from '$lib/features/calculator/form.svelte';
+	import { initHistoryState } from '$lib/features/history';
+	import { initCalculatorFormState } from '$lib/features/calculator';
 
 	// Decoupled Architectural State Initialization Layer
 	const historyState = initHistoryState();

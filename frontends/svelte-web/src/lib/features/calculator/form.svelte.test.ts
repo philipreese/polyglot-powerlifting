@@ -1,5 +1,5 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { CalculatorFormState } from './form.svelte';
+import { CalculatorFormState } from './index';
 import { ApiService } from '$lib/core/services/api';
 
 // Simple mock for HistoryState
