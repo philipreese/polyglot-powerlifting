@@ -1,46 +1,50 @@
 # Polyglot Powerlifting API (FastAPI)
 
-This is the Python backend for the polyglot powerlifting calculator. It is responsible for calculating powerlifting coefficients (Wilks, DOTS, IPF GL, Reshel) and securely saving user history to Supabase.
+This is the Python backend for the polyglot powerlifting calculator. It calculates powerlifting coefficients (Wilks, DOTS, IPF GL, Reshel) and securely saves user history to Supabase.
 
-## Requirements
-*   [uv](https://docs.astral.sh/uv/) (The ultra-fast Python package manager)
+## 🚀 Key Features
+- **Clean Architecture**: Implementation of Repository and Service Layer patterns.
+- **Dependency Injection**: Modular components via FastAPI's `Depends` system.
+- **Structured Logging**: Production-grade observability with `structlog`.
+- **Global Error Handling**: Centralized management of `DomainException` for consistent API responses.
+- **Type Safety**: Pydantic v2 models for request validation and response schemas.
 
-## Local Development
+## 🛠️ Local Development
 
 ### 1. Environment Variables
 Copy the `.env.example` file to `.env` and fill in your Supabase credentials:
 ```bash
 cp .env.example .env
 ```
-*(Ask your team or check your Supabase dashboard for the `SUPABASE_URL` and `SUPABASE_KEY`).*
+Standardized on:
+- `SUPABASE_URL`
+- `SUPABASE_ANON_KEY`
 
 ### 2. Running the Server
-Because we use `uv`, you don't need to manually activate virtual environments. You can run the FastAPI development server with one command:
-
+FastAPI dev server via `uv`:
 ```bash
 uv run fastapi dev main.py
 ```
-*(This is the modern, built-in CLI for FastAPI that automatically includes hot-reloading!)*
 
-### 3. Viewing the API Docs
-Once the server is running, visit:
-*   **Interactive Swagger UI:** [http://127.0.0.1:8000/docs](http://127.0.0.1:8000/docs)
+## 🏗️ Architecture
+The backend follows an enterprise-grade pattern for testability:
+- **Repositories**: `repositories/` isolates all database logic.
+- **Services**: `services/` encapsulates business logic and orchestration.
+- **Middleware**: Global exception handling and request logging.
 
-### 4. Testing the Production Container
-To verify the Docker image works locally before deploying to Render, you can use Podman (a drop-in replacement for Docker):
+## 🧪 Testing
+Run the pytest suite:
+```bash
+# From this directory
+uv run pytest
 
-1. **Build the Image:**
+# Or from root
+make api-test
+```
+
+## 🐳 Docker / Deployment
+The API is containerized for deployment (e.g., to Render).
 ```bash
 podman build -t polyglot-api .
 ```
-
-2. **Run the Container:**
-Pass in your keys (the image requires them) and map port 8000. 
-*(Note: If you are running WSL, you must use `--network=host` instead of `-p 8000:8000` so Windows can see the port).*
-```bash
-podman run -p 8000:8000 \
-  -e SUPABASE_URL="YOUR_URL_HERE" \
-  -e SUPABASE_KEY="YOUR_PUBLISHABLE_KEY_HERE" \
-  polyglot-api
-```
-The API will then be available at `http://127.0.0.1:8000`.
+Interactive Swagger UI is available at `/docs` when running.
