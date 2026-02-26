@@ -1,11 +1,11 @@
 <script lang="ts">
   import Card from '$lib/components/ui/Card.svelte';
   import MetricCard from '$lib/components/ui/MetricCard.svelte';
-  import { getCalculatorState } from '$lib/state/calculator.svelte';
+  import { getCalculatorFormState } from '$lib/state/form.svelte';
   import { Calculator } from 'lucide-svelte';
   import { METRIC_CONFIG, type MetricKey } from '$lib/constants';
 
-  const state = getCalculatorState();
+  const state = getCalculatorFormState();
 
   let primaryMetric = $derived(METRIC_CONFIG[state.preferredMetric]);
   let secondaryMetrics = $derived(

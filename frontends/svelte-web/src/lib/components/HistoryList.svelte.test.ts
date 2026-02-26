@@ -5,8 +5,13 @@ import HistoryList from './HistoryList.svelte';
 
 let mockState: any;
 
-vi.mock('$lib/state/calculator.svelte', () => ({
-    getCalculatorState: () => mockState
+vi.mock('$lib/state/history.svelte', () => ({
+    getHistoryState: () => mockState
+}));
+
+// Mock the form state as well because HistoryItem deeply renders and needs the preferred metric
+vi.mock('$lib/state/form.svelte', () => ({
+    getCalculatorFormState: () => ({ preferredMetric: 'dots' })
 }));
 
 describe('HistoryList Component', () => {

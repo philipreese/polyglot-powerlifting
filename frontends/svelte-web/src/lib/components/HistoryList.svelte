@@ -1,10 +1,10 @@
 <script lang="ts">
-  import { getCalculatorState } from '$lib/state/calculator.svelte';
+  import { getHistoryState } from '$lib/state/history.svelte';
   import { History } from 'lucide-svelte';
   import Card from '$lib/components/ui/Card.svelte';
   import HistoryItem from '$lib/components/ui/HistoryItem.svelte';
 
-  const state = getCalculatorState();
+  const state = getHistoryState();
 
   // Limit History rendered items so it doesn't get infinitely huge
   let displayedHistory = $derived(state.history.slice(0, 15));

@@ -6,8 +6,8 @@ import CalculatorResults from './CalculatorResults.svelte';
 // Mutable mock state for rendering dynamic graphs
 let mockState: any;
 
-vi.mock('$lib/state/calculator.svelte', () => ({
-    getCalculatorState: () => mockState
+vi.mock('$lib/state/form.svelte', () => ({
+    getCalculatorFormState: () => mockState
 }));
 
 describe('CalculatorResults Component', () => {
