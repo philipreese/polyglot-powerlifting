@@ -1,3 +1,4 @@
+SHELL := /bin/bash
 .PHONY: api-dev api-test web-test-e2e gen-types
 
 # Starts the FastAPI development server with hot-reloading
@@ -10,8 +11,8 @@ api-test:
 
 # Runs the SvelteKit End-to-End browser tests (Playwright)
 web-test-e2e:
-	cd frontends/svelte-web && pnpm run test:e2e
+	cd frontends/svelte-web && npx pnpm run test:e2e
 
 # Generates frontend TypeScript schemas based on the FastAPI OpenAPI spec
 gen-types:
-	cd frontends/svelte-web && pnpm run gen-types && npx prettier --write src/lib/schemas/openapi.ts
+	cd frontends/svelte-web && npx pnpm run gen-types && npx prettier --write src/lib/schemas/openapi.ts
