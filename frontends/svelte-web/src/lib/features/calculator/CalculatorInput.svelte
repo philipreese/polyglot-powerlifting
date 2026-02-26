@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getCalculatorState } from '$lib/state/calculator.svelte';
+  import { getCalculatorFormState } from '$lib/features/calculator/form.svelte';
   import Input from '$lib/components/ui/Input.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import Card from '$lib/components/ui/Card.svelte';
@@ -7,7 +7,7 @@
   import { METRIC_CONFIG } from '$lib/constants';
  
   // Retrieve the reactive Svelte 5 state from the context
-  const state = getCalculatorState();
+  const state = getCalculatorFormState();
 </script>
 
 <Card class="space-y-6">

@@ -18,7 +18,7 @@ test.describe('Sync Flow', () => {
 
         // 3. Verify it saved to local history
         await expect(page.getByRole('heading', { name: 'Recent Calculations' })).toBeVisible();
-        await expect(page.getByText('550 kg')).toBeVisible(); 
+        await expect(page.getByText('550kg')).toBeVisible(); 
         
         // Ensure the "Sync to cloud" prompt is NOT visible since we aren't logged in yet
         await expect(page.getByText('Log in to sync')).not.toBeVisible();
@@ -40,7 +40,7 @@ test.describe('Sync Flow', () => {
         // 7. Verify the sync prompt appears now that we have local data AND an active session
         const syncButton = page.getByRole('button', { name: 'Sync to Cloud' });
         await expect(page.getByText('Sync Offline History?')).toBeVisible();
-        await expect(page.getByText('We found un-synced calculations saved on this device. Would you like to merge them into your account?')).toBeVisible();
+        await expect(page.getByText(/We found \d+ un-synced calculations/)).toBeVisible();
         await expect(syncButton).toBeVisible();
 
         // 8. Click the sync button

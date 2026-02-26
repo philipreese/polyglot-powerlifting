@@ -1,9 +1,8 @@
 <script lang="ts">
-  import CalculatorInput from '$lib/components/CalculatorInput.svelte';
-  import CalculatorResults from '$lib/components/CalculatorResults.svelte';
+  import { CalculatorInput, CalculatorResults } from '$lib/features/calculator';
+  import { HistoryList } from '$lib/features/history';
+  import { AuthStatus } from '$lib/features/auth';
   import ThemeToggle from '$lib/components/ThemeToggle.svelte';
-  import HistoryList from '$lib/components/HistoryList.svelte';
-  import AuthStatus from '$lib/components/AuthStatus.svelte';
 </script>
 
 <div class="min-h-screen p-4 lg:p-8 overflow-x-hidden">

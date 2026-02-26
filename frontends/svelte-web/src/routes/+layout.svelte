@@ -2,11 +2,12 @@
 	import '../app.css';
 	import favicon from '$lib/assets/favicon.svg';
 	import { ModeWatcher } from 'mode-watcher';
-	import { initCalculatorState } from '$lib/state/calculator.svelte';
+	import { initHistoryState } from '$lib/features/history';
+	import { initCalculatorFormState } from '$lib/features/calculator';
 
-	// Initialize the global calculator state directly in the root layout.
-	// This prevents SSR leakage and makes the state accessible via getCalculatorState() to all child pages.
-	initCalculatorState();
+	// Decoupled Architectural State Initialization Layer
+	const historyState = initHistoryState();
+	initCalculatorFormState(historyState);
 
 	let { children } = $props();
 </script>

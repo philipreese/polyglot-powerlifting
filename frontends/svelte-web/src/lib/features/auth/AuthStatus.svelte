@@ -1,6 +1,6 @@
 <script lang="ts">
-  import { getAuth } from '$lib/state/auth.svelte';
-  import { supabase } from '$lib/services/supabase';
+  import { getAuth } from '$lib/features/auth/auth.svelte';
+  import { supabase } from '$lib/core/services/supabase';
   import { CircleUser, LogOut } from 'lucide-svelte';
 
   const authState = getAuth();

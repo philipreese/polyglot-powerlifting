@@ -50,7 +50,7 @@ class LiftsRepository:
         if not client or not lifts:
             return []
         
-        records = [lift.model_dump(mode="json", exclude_unset=True, exclude={"total"}) for lift in lifts]
+        records = [lift.model_dump(mode="json", exclude_none=True, exclude={"total"}) for lift in lifts]
         res = client.table("lifts").insert(records).execute()
         return [LiftResponse(**lift) for lift in res.data] if res.data else []
 

@@ -1,10 +1,10 @@
 <script lang="ts">
-  import type { LiftResponse } from '$lib/schemas';
-  import { getCalculatorState } from '$lib/state/calculator.svelte';
+  import type { LiftResponse } from '$lib/core/schemas';
+  import { getCalculatorFormState } from '$lib/features/calculator/form.svelte';
   import { Trash2, Star } from 'lucide-svelte';
   import { METRIC_CONFIG, type MetricKey } from '$lib/constants';
 
-  const state = getCalculatorState();
+  const state = getCalculatorFormState();
 
   let { record, onDelete, onFeature, featuredId } = $props<{
     record: LiftResponse;
