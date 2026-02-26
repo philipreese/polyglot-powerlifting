@@ -22,7 +22,12 @@
       if (isRegistering) {
         const { error: signUpError, data } = await supabase.auth.signUp({
           email,
-          password
+          password,
+          options: {
+            // Explicitly redirect back to the app's login page after confirmation
+            // This works for both localhost:5173 and your-app.vercel.app dynamically
+            emailRedirectTo: `${window.location.origin}/login`
+          }
         });
         
         if (signUpError) throw signUpError;
