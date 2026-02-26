@@ -88,6 +88,14 @@ const endpoints = makeApi([
   },
   {
     method: 'delete',
+    path: '/lifts/',
+    alias: 'clear_lifts_lifts__delete',
+    description: `Clear all authenticated history.`,
+    requestFormat: 'json',
+    response: z.unknown()
+  },
+  {
+    method: 'delete',
     path: '/lifts/:lift_id',
     alias: 'delete_lift_lifts__lift_id__delete',
     requestFormat: 'json',
@@ -99,6 +107,28 @@ const endpoints = makeApi([
       }
     ],
     response: z.unknown(),
+    errors: [
+      {
+        status: 422,
+        description: `Validation Error`,
+        schema: HTTPValidationError
+      }
+    ]
+  },
+  {
+    method: 'post',
+    path: '/lifts/sync',
+    alias: 'sync_lifts_lifts_sync_post',
+    description: `Bulk import local offline history into the user&#x27;s account.`,
+    requestFormat: 'json',
+    parameters: [
+      {
+        name: 'body',
+        type: 'Body',
+        schema: z.array(LiftResponse)
+      }
+    ],
+    response: z.array(LiftResponse),
     errors: [
       {
         status: 422,

@@ -1,105 +1,90 @@
+import { createApiClient } from '$lib/schemas/openapi';
 import type { LiftRequest, LiftResponse } from '$lib/schemas';
 import { getAuthToken } from '$lib/state/auth.svelte';
 
-// The ApiService acts as the HTTP network boundary for our application, 
-// strictly utilizing backend domain models to communicate with FastAPI.
+// Initialize the Zodios network client perfectly typed to FastAPI!
+const getBaseUrl = () => import.meta.env.VITE_API_URL || 'http://localhost:8000';
+const apiClient = createApiClient(getBaseUrl());
+
+function getAuthConfig() {
+  const token = getAuthToken();
+  return token ? { headers: { Authorization: `Bearer ${token}` } } : {};
+}
+
+// The ApiService acts as the HTTP network boundary for our application.
+// We've shifted from manually parsing `fetch` to leveraging Zodios End-to-End type safety!
 export class ApiService {
-  private static getBaseUrl(): string {
-    return import.meta.env.VITE_API_URL || 'http://localhost:8000';
-  }
-
-  private static getHeaders(includeAuth: boolean = true): Record<string, string> {
-    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
-    if (includeAuth) {
-      const token = getAuthToken();
-      if (token) {
-        headers['Authorization'] = `Bearer ${token}`;
-      }
-    }
-    return headers;
-  }
-
   /**
    * Submits lift data to the FastAPI backend and calculates scores.
-   * Includes a timeout to aggressively fail if the backend is not running.
+   * If the data returned by the backend violates the `LiftResponse` shape, 
+   * Zodios will inherently throw an error, protecting our Svelte UI.
    */
-  static async calculateScores(data: LiftRequest, timeoutMs = 3000) {
-    const controller = new AbortController();
-    const timeoutId = setTimeout(() => controller.abort(), timeoutMs);
-
+  static async calculateScores(data: LiftRequest) {
     try {
-      const res = await fetch(`${this.getBaseUrl()}/lifts`, {
-        method: 'POST',
-        headers: this.getHeaders(),
-        body: JSON.stringify(data),
-        signal: controller.signal
+      // The typescript compiler knows this takes `LiftRequest` and returns `LiftResponse`!
+      const res = await apiClient.post('/lifts/', data, {
+        ...getAuthConfig(),
+        timeout: 3000 // Zodios supports built in timeout natively
       });
-
-      if (!res.ok) {
-        throw new Error(`Server returned status ${res.status}`);
-      }
-
-      return await res.json();
+      return res;
     } catch (err: any) {
-      if (err.name === 'AbortError') {
+       // Zodios cleanly parses validation and network errors
+      if (err.message.includes('timeout')) {
         throw new Error('Connection timed out. Is the local FastAPI server running?');
       }
       throw new Error(`API Error: ${err.message}`);
-    } finally {
-      clearTimeout(timeoutId);
     }
   }
 
   static async getHistory(): Promise<LiftResponse[]> {
-    const token = getAuthToken();
-    if (!token) return [];
+    const config = getAuthConfig();
+    if (!config.headers) return [];
 
-    const res = await fetch(`${this.getBaseUrl()}/lifts`, {
-      headers: this.getHeaders()
-    });
-    
-    if (!res.ok) throw new Error(`Failed to fetch history: ${res.status}`);
-    return await res.json();
+    try {
+      const res = await apiClient.get('/lifts/', config);
+      return res;
+    } catch (err) {
+      console.error(err);
+      return [];
+    }
   }
 
   static async deleteHistoryRecord(id: string): Promise<boolean> {
-    const token = getAuthToken();
-    if (!token) return false;
+    const config = getAuthConfig();
+    if (!config.headers) return false;
 
-    const res = await fetch(`${this.getBaseUrl()}/lifts/${id}`, {
-      method: 'DELETE',
-      headers: this.getHeaders()
-    });
-    
-    return res.ok;
+    try {
+      await apiClient.delete('/lifts/:lift_id', undefined, {
+        params: { lift_id: id },
+        ...config
+      });
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   static async clearHistory(): Promise<boolean> {
-    const token = getAuthToken();
-    if (!token) return false;
+    const config = getAuthConfig();
+    if (!config.headers) return false;
 
-    const res = await fetch(`${this.getBaseUrl()}/lifts`, {
-      method: 'DELETE',
-      headers: this.getHeaders()
-    });
-    
-    return res.ok;
+    try {
+      await apiClient.delete('/lifts/', undefined, config);
+      return true;
+    } catch {
+      return false;
+    }
   }
 
   static async syncLocalLifts(lifts: LiftResponse[]): Promise<LiftResponse[]> {
-    const token = getAuthToken();
-    if (!token || lifts.length === 0) return [];
+    const config = getAuthConfig();
+    if (!config.headers || lifts.length === 0) return [];
 
-    const res = await fetch(`${this.getBaseUrl()}/lifts/sync`, {
-      method: 'POST',
-      headers: { 
-        'Authorization': `Bearer ${token}`,
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(lifts)
-    });
-    
-    if (!res.ok) throw new Error(`Failed to sync history: ${res.status}`);
-    return await res.json();
+    try {
+      const res = await apiClient.post('/lifts/sync', lifts, config);
+      return res;
+    } catch (err) {
+      throw new Error("Failed to selectively merge history");
+    }
   }
 }
