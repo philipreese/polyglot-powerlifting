@@ -1,9 +1,9 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import { getAuth, getAuthToken } from './auth.svelte';
-import { supabase } from '$lib/services/supabase';
+import { supabase } from '$lib/core/services/supabase';
 
 // Mock Supabase completely so we don't accidentally execute auth callbacks against live project ID
-vi.mock('$lib/services/supabase', () => ({
+vi.mock('$lib/core/services/supabase', () => ({
     supabase: {
         auth: {
             getSession: vi.fn(() => Promise.resolve({ data: { session: null }, error: null })),

@@ -1,6 +1,6 @@
-import { createApiClient } from '$lib/schemas/openapi';
-import type { LiftRequest, LiftResponse } from '$lib/schemas';
-import { getAuthToken } from '$lib/state/auth.svelte';
+import { createApiClient } from '$lib/core/schemas/openapi';
+import type { LiftRequest, LiftResponse } from '$lib/core/schemas';
+import { getAuthToken } from '$lib/features/auth/auth.svelte';
 
 // Initialize the Zodios network client perfectly typed to FastAPI!
 const getBaseUrl = () => import.meta.env.VITE_API_URL || 'http://localhost:8000';

@@ -1,7 +1,7 @@
 import { setContext, getContext } from 'svelte';
-import { getAuth } from '$lib/state/auth.svelte';
-import type { LiftResponse } from '$lib/schemas';
-import { ApiService } from '$lib/services/api';
+import { getAuth } from '$lib/features/auth/auth.svelte';
+import type { LiftResponse } from '$lib/core/schemas';
+import { ApiService } from '$lib/core/services/api';
 
 export class HistoryState {
     history = $state<LiftResponse[]>([]);

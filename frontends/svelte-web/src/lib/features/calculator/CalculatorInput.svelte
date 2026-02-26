@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { getCalculatorFormState } from '$lib/state/form.svelte';
+  import { getCalculatorFormState } from '$lib/features/calculator/form.svelte';
   import Input from '$lib/components/ui/Input.svelte';
   import Select from '$lib/components/ui/Select.svelte';
   import Card from '$lib/components/ui/Card.svelte';

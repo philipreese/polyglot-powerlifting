@@ -5,7 +5,7 @@ import CalculatorInput from './CalculatorInput.svelte';
 
 let mockState: any;
 
-vi.mock('$lib/state/form.svelte', () => ({
+vi.mock('$lib/features/calculator/form.svelte', () => ({
     getCalculatorFormState: () => mockState
 }));
 

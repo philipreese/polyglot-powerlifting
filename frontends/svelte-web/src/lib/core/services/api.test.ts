@@ -1,7 +1,7 @@
 import { describe, it, expect, vi, beforeEach } from 'vitest';
-import { ApiService } from './api';
-import * as authState from '$lib/state/auth.svelte';
-import type { LiftResponse } from '$lib/schemas';
+import { ApiService } from '$lib/core/services/api';
+import * as authState from '$lib/features/auth/auth.svelte';
+import type { LiftResponse } from '$lib/core/schemas';
 
 const mockZodiosClient = vi.hoisted(() => ({
     get: vi.fn(),
@@ -9,11 +9,11 @@ const mockZodiosClient = vi.hoisted(() => ({
     delete: vi.fn()
 }));
 
-vi.mock('$lib/schemas/openapi', () => ({
+vi.mock('$lib/core/schemas/openapi', () => ({
     createApiClient: vi.fn(() => mockZodiosClient)
 }));
 
-vi.mock('$lib/state/auth.svelte', () => ({
+vi.mock('$lib/features/auth/auth.svelte', () => ({
     getAuthToken: vi.fn()
 }));
 

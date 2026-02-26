@@ -1,8 +1,8 @@
 <script lang="ts">
-  import { getHistoryState } from '$lib/state/history.svelte';
+  import { getHistoryState } from '$lib/features/history/history.svelte';
   import { History } from 'lucide-svelte';
   import Card from '$lib/components/ui/Card.svelte';
-  import HistoryItem from '$lib/components/ui/HistoryItem.svelte';
+  import HistoryItem from '$lib/features/history/HistoryItem.svelte';
 
   const state = getHistoryState();
 

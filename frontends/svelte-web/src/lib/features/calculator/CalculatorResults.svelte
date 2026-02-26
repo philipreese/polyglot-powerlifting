@@ -1,7 +1,7 @@
 <script lang="ts">
   import Card from '$lib/components/ui/Card.svelte';
   import MetricCard from '$lib/components/ui/MetricCard.svelte';
-  import { getCalculatorFormState } from '$lib/state/form.svelte';
+  import { getCalculatorFormState } from '$lib/features/calculator/form.svelte';
   import { Calculator } from 'lucide-svelte';
   import { METRIC_CONFIG, type MetricKey } from '$lib/constants';
 

@@ -1,4 +1,4 @@
-import { supabase } from '$lib/services/supabase';
+import { supabase } from '$lib/core/services/supabase';
 import type { User, Session } from '@supabase/supabase-js';
 
 class AuthState {

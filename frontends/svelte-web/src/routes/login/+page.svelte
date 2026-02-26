@@ -1,5 +1,5 @@
 <script lang="ts">
-  import { supabase } from '$lib/services/supabase';
+  import { supabase } from '$lib/core/services/supabase';
   import { goto } from '$app/navigation';
   import Card from '$lib/components/ui/Card.svelte';
   import Input from '$lib/components/ui/Input.svelte';

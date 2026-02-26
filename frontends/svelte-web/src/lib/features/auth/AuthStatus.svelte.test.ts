@@ -2,9 +2,9 @@
 import { render, screen, fireEvent } from '@testing-library/svelte';
 import { describe, it, expect, vi, beforeEach } from 'vitest';
 import AuthStatus from './AuthStatus.svelte';
-import { supabase } from '$lib/services/supabase';
+import { supabase } from '$lib/core/services/supabase';
 
-vi.mock('$lib/services/supabase', () => ({
+vi.mock('$lib/core/services/supabase', () => ({
   supabase: {
     auth: {
       signOut: vi.fn()
@@ -16,7 +16,7 @@ vi.mock('$lib/services/supabase', () => ({
 let mockUser: any = null;
 let mockLoading = false;
 
-vi.mock('$lib/state/auth.svelte', () => ({
+vi.mock('$lib/features/auth/auth.svelte', () => ({
   getAuth: () => ({
     get user() { return mockUser; },
     get isLoading() { return mockLoading; }

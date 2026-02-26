@@ -1,6 +1,6 @@
 <script lang="ts">
-  import type { LiftResponse } from '$lib/schemas';
-  import { getCalculatorFormState } from '$lib/state/form.svelte';
+  import type { LiftResponse } from '$lib/core/schemas';
+  import { getCalculatorFormState } from '$lib/features/calculator/form.svelte';
   import { Trash2, Star } from 'lucide-svelte';
   import { METRIC_CONFIG, type MetricKey } from '$lib/constants';
 
