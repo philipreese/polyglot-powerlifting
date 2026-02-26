@@ -3,6 +3,7 @@
   import CalculatorResults from '$lib/components/CalculatorResults.svelte';
   import ThemeToggle from '$lib/components/ThemeToggle.svelte';
   import HistoryList from '$lib/components/HistoryList.svelte';
+  import AuthStatus from '$lib/components/AuthStatus.svelte';
 </script>
 
 <div class="min-h-screen p-4 lg:p-8 overflow-x-hidden">
@@ -13,7 +14,9 @@
       <h1 class="text-2xl lg:text-4xl font-heading font-bold text-slate-900 dark:text-white tracking-tight">
         Polyglot<span class="text-brand-primary">Powerlifting</span>
       </h1>
-      <div class="shrink-0">
+      <div class="shrink-0 flex items-center gap-3">
+        <AuthStatus />
+        <div class="w-[1px] h-6 bg-slate-200 dark:bg-slate-700"></div>
         <ThemeToggle />
       </div>
     </header>

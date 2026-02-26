@@ -1,4 +1,5 @@
 import { setContext, getContext } from 'svelte';
+import { getAuth } from '$lib/state/auth.svelte';
 import { LiftSchema } from '$lib/schemas';
 import type { LiftResponse } from '$lib/schemas';
 import { ApiService } from '$lib/services/api';
@@ -24,23 +25,108 @@ export class CalculatorState {
     // Persistence
     history = $state<LiftResponse[]>([]);
     preferredMetric = $state<'dots' | 'wilks' | 'ipf_gl' | 'reshel'>('dots');
+    
+    // Auth syncing capability
+    showSyncPrompt = $state(false);
+    isSyncing = $state(false);
 
     constructor() {
         if (typeof window !== 'undefined') {
+            const storedMetric = localStorage.getItem('preferred_metric') as 'dots' | 'wilks' | 'ipf_gl' | 'reshel';
+            if (storedMetric && ['dots', 'wilks', 'ipf_gl', 'reshel'].includes(storedMetric)) {
+                this.preferredMetric = storedMetric;
+            }
+
+            // Immediately load offline history securely
+            this.loadHistory();
+
+            // Svelte 5 Effect that runs exactly when `getAuth().user` changes (login or logout)
+            $effect.root(() => {
+                $effect(() => {
+                    const user = getAuth().user;
+                    if (user) {
+                        this.handleLogin();
+                    } else {
+                        // User logged out, revert to offline storage view
+                        this.loadHistory();
+                    }
+                });
+            });
+        }
+    }
+
+    private loadHistory() {
+        if (getAuth().user) {
+            // Background fetch from cloud
+            ApiService.getHistory().then(serverHistory => {
+               this.history = serverHistory; 
+            }).catch(console.error);
+        } else {
+            // Fetch from local browser storage
             const storedHistory = localStorage.getItem('anonymous_lifts_history');
             if (storedHistory) {
                 try {
                     this.history = JSON.parse(storedHistory);
                 } catch (e) {
                     console.error("Failed to parse local history");
+                    this.history = [];
                 }
-            }
-
-            const storedMetric = localStorage.getItem('preferred_metric') as 'dots' | 'wilks' | 'ipf_gl' | 'reshel';
-            if (storedMetric && ['dots', 'wilks', 'ipf_gl', 'reshel'].includes(storedMetric)) {
-                this.preferredMetric = storedMetric;
+            } else {
+                this.history = [];
             }
         }
+    }
+
+    private async handleLogin() {
+        // Did they just log in, and do they have anonymous history sitting in their browser?
+        const storedHistory = localStorage.getItem('anonymous_lifts_history');
+        if (storedHistory) {
+            try {
+                const localLifts = JSON.parse(storedHistory);
+                if (localLifts.length > 0) {
+                    // Activate UI prompt
+                    this.showSyncPrompt = true;
+                    // Intentionally don't load the cloud history YET until they dismiss the prompt,
+                    // so we don't accidentally wipe what they are looking at in the array
+                    return;
+                }
+            } catch (e) {
+                console.error("Ignoring malformed local history");
+            }
+        }
+        
+        // No local history? Standard login procedure
+        this.loadHistory();
+    }
+
+    async confirmSync() {
+        this.isSyncing = true;
+        try {
+            const storedHistory = localStorage.getItem('anonymous_lifts_history');
+            if (storedHistory) {
+                const localLifts = JSON.parse(storedHistory);
+                if (localLifts.length > 0) {
+                    // 1. Bulk import to FastAPI
+                    await ApiService.syncLocalLifts(localLifts);
+                    
+                    // 2. Clear local storage buffer
+                    localStorage.removeItem('anonymous_lifts_history');
+                }
+            }
+        } catch (err: any) {
+            this.error = "Sync Failed: " + err.message;
+        } finally {
+            this.isSyncing = false;
+            this.showSyncPrompt = false;
+            this.loadHistory();
+        }
+    }
+
+    dismissSync() {
+        this.showSyncPrompt = false;
+        // User explicitly denied sync. Go ahead and wipe it locally so we don't prompt again.
+        localStorage.removeItem('anonymous_lifts_history');
+        this.loadHistory();
     }
 
     setPreferredMetric(metric: 'dots' | 'wilks' | 'ipf_gl' | 'reshel') {
@@ -58,7 +144,6 @@ export class CalculatorState {
     async calculate() {
         this.error = null;
         
-        // 1. Frontend Zod Validation
         const parsed = LiftSchema.safeParse({
             bodyweight: this.bodyweight,
             gender: this.gender,
@@ -73,26 +158,21 @@ export class CalculatorState {
             return;
         }
 
-        // 2. Fetch from FastAPI Backend
         this.isLoading = true;
         try {
             const data = await ApiService.calculateScores(parsed.data);
             
-            // 3. Update reactive state with results!
             this.wilks = data.wilks;
             this.dots = data.dots;
             this.ipf_gl = data.ipf_gl;
             this.reshel = data.reshel;
 
-            // 4. Save to anonymous local history
-            const newRecord: LiftResponse = {
-                ...data,
-                id: crypto.randomUUID(),
-                created_at: new Date().toISOString()
-            };
+            // Notice we do NOT manually assign a random UUID here.
+            // If logged in, FastAPI assigns a UUID and returns the saved block.
+            // If anonymous, FastAPI actually assigns a UUID and returns it anyway!
             
-            this.history = [newRecord, ...this.history];
-            this._persistHistory();
+            this.history = [data, ...this.history];
+            this._persistStateLocallyIfAnonymous();
 
         } catch (err: any) {
             this.error = err.message || "Failed to connect to API";
@@ -101,18 +181,36 @@ export class CalculatorState {
         }
     }
 
-    deleteHistoryRecord(id: string) {
+    async deleteHistoryRecord(id: string) {
+        if (getAuth().user) {
+            const success = await ApiService.deleteHistoryRecord(id);
+            if (!success) {
+                this.error = "Failed to delete record remotely";
+                return;
+            }
+        }
+        
         this.history = this.history.filter(record => record.id !== id);
-        this._persistHistory();
+        this._persistStateLocallyIfAnonymous();
     }
 
-    clearHistory() {
+    async clearHistory() {
+        if (getAuth().user) {
+            const success = await ApiService.clearHistory();
+             if (!success) {
+                this.error = "Failed to clear history remotely";
+                return;
+            }
+        }
+        
         this.history = [];
-        this._persistHistory();
+        this._persistStateLocallyIfAnonymous();
     }
 
-    private _persistHistory() {
-        if (typeof window !== 'undefined') {
+    private _persistStateLocallyIfAnonymous() {
+        // We strictly ONLY write to localStorage if logged OUT.
+        // If logged IN, the cloud is the absolute source of truth.
+        if (typeof window !== 'undefined' && !getAuth().user) {
             localStorage.setItem('anonymous_lifts_history', JSON.stringify(this.history));
         }
     }
