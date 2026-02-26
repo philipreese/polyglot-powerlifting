@@ -6,9 +6,14 @@ from repositories.lifts import LiftsRepository
 from services.formulas import calculate_dots, calculate_ipf_gl, calculate_reshel, calculate_wilks
 
 
+from fastapi import Depends
+from repositories.lifts import LiftsRepository, get_lifts_repository
+
 class LiftsService:
-    @staticmethod
-    def calculate_results(request: LiftRequest) -> LiftResponse:
+    def __init__(self, lifts_repo: LiftsRepository):
+        self.lifts_repo = lifts_repo
+
+    def calculate_results(self, request: LiftRequest) -> LiftResponse:
         """Calculate all powerlifting scores for a given request."""
         total = request.squat + request.bench + request.deadlift
         
@@ -28,38 +33,37 @@ class LiftsService:
         
         return LiftResponse(**response_data)
 
-    @classmethod
-    def create_lift(cls, request: LiftRequest, user_id: Optional[str] = None, token: Optional[str] = None) -> LiftResponse:
+    def create_lift(self, request: LiftRequest, user_id: Optional[str] = None, token: Optional[str] = None) -> LiftResponse:
         """Complete orchestration for creating a lift, including calculation and persistence."""
-        lift_model = cls.calculate_results(request)
+        lift_model = self.calculate_results(request)
         
         if user_id and token:
             lift_model.user_id = UUID(user_id) if isinstance(user_id, str) else user_id
-            db_record = LiftsRepository.create(lift_model, token)
+            db_record = self.lifts_repo.create(lift_model, token)
             if db_record:
                 return db_record
                 
         return lift_model
 
-    @staticmethod
-    def get_history(user_id: str, token: str) -> List[LiftResponse]:
+    def get_history(self, user_id: str, token: str) -> List[LiftResponse]:
         """Fetch user history via repository."""
-        return LiftsRepository.get_by_user(user_id, token)
+        return self.lifts_repo.get_by_user(user_id, token)
 
-    @staticmethod
-    def delete_lift(lift_id: UUID, user_id: str, token: str) -> bool:
+    def delete_lift(self, lift_id: UUID, user_id: str, token: str) -> bool:
         """Delete a lift via repository."""
-        return LiftsRepository.delete(lift_id, user_id, token)
+        return self.lifts_repo.delete(lift_id, user_id, token)
 
-    @staticmethod
-    def clear_history(user_id: str, token: str) -> bool:
+    def clear_history(self, user_id: str, token: str) -> bool:
         """Clear all lifts for a user via repository."""
-        return LiftsRepository.delete_all(user_id, token)
+        return self.lifts_repo.delete_all(user_id, token)
 
-    @staticmethod
-    def sync_lifts(lifts: List[LiftResponse], user_id: str, token: str) -> List[LiftResponse]:
+    def sync_lifts(self, lifts: List[LiftResponse], user_id: str, token: str) -> List[LiftResponse]:
         """Sync local lifts to the database."""
         for lift in lifts:
             lift.user_id = UUID(user_id) if isinstance(user_id, str) else user_id
             
-        return LiftsRepository.bulk_create(lifts, token)
+        return self.lifts_repo.bulk_create(lifts, token)
+
+def get_lifts_service(lifts_repo: LiftsRepository = Depends(get_lifts_repository)) -> LiftsService:
+    """Provider function for LiftsService injection."""
+    return LiftsService(lifts_repo)
