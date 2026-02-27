@@ -90,7 +90,6 @@
   {:else if state.history.length === 0 && !state.showSyncPrompt}
     <div class="flex flex-col items-center py-8 text-center bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
       <p class="text-sm text-slate-500 dark:text-slate-400">No recorded history yet.</p>
-      <p class="text-xs text-slate-400 mt-1">Calculations will be saved here locally.</p>
     </div>
   {:else}
     <!-- Grid format handles width much better than pure list -->

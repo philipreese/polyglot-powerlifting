@@ -1,5 +1,5 @@
 from typing import List, Optional
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from middleware.logging import DomainException
 from models.schemas import LiftResponse
@@ -65,7 +65,17 @@ class LiftsRepository:
         if not lifts:
             return []
         
-        records = [lift.model_dump(mode="json", exclude_none=True, exclude={"total"}) for lift in lifts]
+        records = []
+        for lift in lifts:
+            # PostgREST requires uniform keys for bulk inserts.
+            # If some records are missing 'id', it pads with null, causing constraint violations.
+            # We ensure every record has an ID here.
+            if lift.id is None:
+                lift.id = uuid4()
+                
+            data = lift.model_dump(mode="json", exclude_none=True, exclude={"total"})
+            records.append(data)
+        
         try:
             res = client.table("lifts").insert(records).execute()
             return [LiftResponse(**lift) for lift in res.data] if res.data else []

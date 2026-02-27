@@ -1,5 +1,5 @@
 from typing import List, Optional
-from uuid import UUID
+from uuid import UUID, uuid4
 
 from fastapi import Depends
 from models.schemas import LiftRequest, LiftResponse
@@ -22,6 +22,7 @@ class LiftsService:
         
         response_data = request.model_dump()
         response_data.update({
+            "id": uuid4(),
             "total": total,
             "wilks": wilks,
             "dots": dots,
