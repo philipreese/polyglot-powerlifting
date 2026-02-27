@@ -6,6 +6,7 @@ from middleware.logging import (
     setup_logging,
     universal_exception_handler,
 )
+from routes.health import router as health_router
 from routes.lifts import router as lifts_router
 
 # Initialize structured logging
@@ -31,6 +32,7 @@ app.add_middleware(
 )
 
 app.include_router(lifts_router)
+app.include_router(health_router)
 
 @app.get("/")
 def read_root():

@@ -76,6 +76,12 @@ export class HistoryState {
     private async _loadCloudHistory() {
         const user = getAuth().user;
         if (!user || this._isLoadingCloud) return;
+        
+        // Stability guard: Don't reload if we already have this user's data
+        // unless it's a forced refresh (which we don't have yet)
+        if (this._lastLoadedUserId === user.id && this._cloudHistory.length > 0) {
+            return;
+        }
 
         this._isLoadingCloud = true;
         try {
@@ -83,13 +89,14 @@ export class HistoryState {
             this._lastLoadedUserId = user.id;
         } catch (err) {
             console.error("Failed to load cloud history:", err);
-            // Don't wipe _cloudHistory here, keep what we have (optimistic UI)
         } finally {
             this._isLoadingCloud = false;
         }
     }
 
     private handleLogout() {
+        if (this._lastLoadedUserId === null && this._cloudHistory.length === 0) return;
+        
         this._cloudHistory = [];
         this._lastLoadedUserId = null;
         this._loadLocalHistory(); // Restore local context
