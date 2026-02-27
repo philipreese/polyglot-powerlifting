@@ -1,6 +1,6 @@
 from typing import Optional
-import structlog
 
+import structlog
 from fastapi import Depends, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
 from middleware.logging import DomainException
