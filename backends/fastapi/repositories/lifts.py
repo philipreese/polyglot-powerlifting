@@ -35,7 +35,7 @@ class LiftsRepository:
             raise DomainException("Database client not initialized", status_code=500)
             
         try:
-            res = client.table("lifts").select("*").eq("user_id", user_id).execute()
+            res = client.table("lifts").select("*").eq("user_id", user_id).order("created_at", desc=True).execute()
             return [LiftResponse(**lift) for lift in res.data]
         except Exception as e:
             raise DomainException(f"Failed to fetch history: {str(e)}", status_code=500)

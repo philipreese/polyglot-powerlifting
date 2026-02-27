@@ -76,15 +76,14 @@ export class HistoryState {
     private async _loadCloudHistory() {
         const user = getAuth().user;
         if (!user || this._isLoadingCloud) return;
-        if (this._lastLoadedUserId === user.id) return;
 
         this._isLoadingCloud = true;
         try {
-            console.log("HistoryState: Loading cloud history for", user.email);
             this._cloudHistory = await ApiService.getHistory();
             this._lastLoadedUserId = user.id;
         } catch (err) {
             console.error("Failed to load cloud history:", err);
+            // Don't wipe _cloudHistory here, keep what we have (optimistic UI)
         } finally {
             this._isLoadingCloud = false;
         }
