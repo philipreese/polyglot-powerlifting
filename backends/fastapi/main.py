@@ -23,10 +23,11 @@ app.add_exception_handler(DomainException, domain_exception_handler)
 app.add_exception_handler(Exception, universal_exception_handler)
 
 # Allow our SvelteKit and React Native apps to talk to this backend
+# Note: allow_origins=["*"] is restricted when allow_credentials=True
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
-    allow_credentials=True,
+    allow_credentials=False, # Set to False since we use Authorization headers, not Cookies
     allow_methods=["*"],
     allow_headers=["*"],
 )

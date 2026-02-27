@@ -12,7 +12,7 @@ export class HistoryState {
     error = $state<string | null>(null);
     private _cleanup: (() => void) | null = null;
     private _lastLoadedUserId: string | null = null;
-    private _isLoadingCloud = false;
+    isLoading = $state(false);
 
     // Derived: Only show sync prompt if logged in AND we have local data
     showSyncPrompt = $derived(getAuth().user != null && this._localHistory.length > 0);
@@ -58,7 +58,6 @@ export class HistoryState {
 
     private _loadInitialData() {
         this._loadLocalHistory();
-        // Removed direct _loadCloudHistory call to prevent double-init with the $effect below
     }
 
     private _loadLocalHistory() {
@@ -73,24 +72,24 @@ export class HistoryState {
         }
     }
 
-    private async _loadCloudHistory() {
+    private async _loadCloudHistory(force = false) {
         const user = getAuth().user;
-        if (!user || this._isLoadingCloud) return;
+        if (!user || this.isLoading) return;
         
-        // Stability guard: Don't reload if we already have this user's data
-        // unless it's a forced refresh (which we don't have yet)
-        if (this._lastLoadedUserId === user.id && this._cloudHistory.length > 0) {
+        // Stability guard: We only want to try loading ONCE per user-session 
+        // to avoid infinite loops if the API fails or is empty.
+        if (!force && this._lastLoadedUserId === user.id) {
             return;
         }
 
-        this._isLoadingCloud = true;
+        this.isLoading = true;
         try {
             this._cloudHistory = await ApiService.getHistory();
-            this._lastLoadedUserId = user.id;
         } catch (err) {
             console.error("Failed to load cloud history:", err);
         } finally {
-            this._isLoadingCloud = false;
+            this._lastLoadedUserId = user.id;
+            this.isLoading = false;
         }
     }
 
@@ -98,8 +97,9 @@ export class HistoryState {
         if (this._lastLoadedUserId === null && this._cloudHistory.length === 0) return;
         
         this._cloudHistory = [];
-        this._lastLoadedUserId = null;
+        this._lastLoadedUserId = null; // Reset so the next user can load
         this._loadLocalHistory(); // Restore local context
+        this.isLoading = false;
         this.error = null;
     }
 
@@ -122,7 +122,7 @@ export class HistoryState {
             this.error = "Sync Failed: " + (err.message || "Unknown Error");
         } finally {
             this.isSyncing = false;
-            this._loadCloudHistory();
+            await this._loadCloudHistory(true);
         }
     }
 
