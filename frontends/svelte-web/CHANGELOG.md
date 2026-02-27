@@ -1,11 +1,10 @@
 # Changelog
 
-## [0.4.0](https://github.com/philipreese/polyglot-powerlifting/compare/v0.3.0...v0.4.0) (2026-02-27)
+## [0.1.0](https://github.com/philipreese/polyglot-powerlifting/compare/svelte-web-v0.0.1...svelte-web-v0.1.0) (2026-02-27)
 
 
 ### Features
 
-* add Svelte web frontend to release-please configuration ([ed14f8b](https://github.com/philipreese/polyglot-powerlifting/commit/ed14f8b87b40fe4d2d3ecb61d7f31387a7691ffc))
 * centralize metric configuration and implement global preferred metric selection ([650ac69](https://github.com/philipreese/polyglot-powerlifting/commit/650ac696c2212c26621193f197f1d37a0ffa8b89))
 * implement supabase auth flow and local history sync ([030c794](https://github.com/philipreese/polyglot-powerlifting/commit/030c794e29b7013304720198feabdab6d5873bd8))
 * implement supabase auth flow and local history sync ([567c5e3](https://github.com/philipreese/polyglot-powerlifting/commit/567c5e387608b66d55a9808dbc855ae5bf28c515))
@@ -28,29 +27,12 @@
 * finalize production stability with clean and verified code ([15d95f6](https://github.com/philipreese/polyglot-powerlifting/commit/15d95f61871074a4b1e4e79a4fbc832d0ca76a59))
 * force history reload after sync to bypass stability guard ([0829a39](https://github.com/philipreese/polyglot-powerlifting/commit/0829a39c7a9f3b781ec91da8409dac964dbcd76b))
 * improve E2E test resilience and add history loading UI ([4a4e7d2](https://github.com/philipreese/polyglot-powerlifting/commit/4a4e7d273557d8d8c69a08ac8a2cae51cb19e8c2))
-* linting error ([7b0bff1](https://github.com/philipreese/polyglot-powerlifting/commit/7b0bff1a64e5013b19181e938e12e76424ec45bd))
 * prevent redundant history API calls and resolve production crash ([2f77332](https://github.com/philipreese/polyglot-powerlifting/commit/2f7733271cf0faecad667da84422c72e091f7ce8))
 * production auth diagnostics and stability improvements ([4e7d161](https://github.com/philipreese/polyglot-powerlifting/commit/4e7d1618d6a8b710891fa2c56c1a6d87dc1481fc))
 * production auth diagnostics and stability improvements ([4c91527](https://github.com/philipreese/polyglot-powerlifting/commit/4c9152727096132990712f2cd93537bce1c88c20))
 * production stability, env var standardization, and history sorting ([c3ac17a](https://github.com/philipreese/polyglot-powerlifting/commit/c3ac17a3dc9890bd4d94a30384dda89b9a90a72c))
-* removed unused import ([d9328ea](https://github.com/philipreese/polyglot-powerlifting/commit/d9328ea221f2c9dc9e268a154da9ada8ed503b77))
 * resolve E2E race conditions for CI stability ([00615b5](https://github.com/philipreese/polyglot-powerlifting/commit/00615b5e965e0e9b40c40e0967cab572c140ffa1))
 * resolve infinite state loop and CORS configuration mismatch ([8e2d83c](https://github.com/philipreese/polyglot-powerlifting/commit/8e2d83cdeca8a7710c9624c1a645e6619374dea3))
 * resolve infinite state loop and CORS configuration mismatch ([e9d5b09](https://github.com/philipreese/polyglot-powerlifting/commit/e9d5b09c54343d76cf3e1e058a86a58aa44ac04e))
 * safely handle nullish record IDs in history list ([1a1bd8d](https://github.com/philipreese/polyglot-powerlifting/commit/1a1bd8d8703b8e43889805bcc1bed3afe6e5a621))
-* **ui:** upgrade mode-watcher to svelte 5 runes and update learning plan ([5c5d5f2](https://github.com/philipreese/polyglot-powerlifting/commit/5c5d5f23dfe34b722b6f2ffef0c664dbdcd02069))
 * **ui:** upgrade mode-watcher usage to native svelte 5 runes syntax ([46d3d8b](https://github.com/philipreese/polyglot-powerlifting/commit/46d3d8b8258452c39344931b6b4c8e73baa642e5))
-
-## [0.3.0](https://github.com/philipreese/polyglot-powerlifting/compare/v0.2.0...v0.3.0) (2026-02-25)
-
-
-### Features
-
-* **api:** scaffold fastapi app with database init, wilks/dots/gl logic, and run scripts ([9818001](https://github.com/philipreese/polyglot-powerlifting/commit/981800142a3dcdb528f03aadeb793178c6ab3598))
-
-## [0.2.0](https://github.com/philipreese/polyglot-powerlifting/compare/v0.1.0...v0.2.0) (2026-02-25)
-
-
-### Features
-
-* **spec:** define openapi structure and coefficient math ([55c8673](https://github.com/philipreese/polyglot-powerlifting/commit/55c86739f2724df780d2d5158ec729ee2123af42))
