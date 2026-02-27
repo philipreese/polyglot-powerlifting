@@ -79,9 +79,8 @@ Frontends send `Authorization: Bearer <token>` when logged in. Anonymous request
 
 ## Repository Structure
 ```
-/spec
-  openapi.yaml         ← define first
-  coefficients.md      ← formula reference (Wilks, DOTS, IPF GL, Reshel)
+/docs
+  formulas.md          ← formula reference (Wilks, DOTS, IPF GL, Reshel)
 
 /backends
   /fastapi             ← Python (familiar, build first)
@@ -183,7 +182,7 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [x] **Type Sync:** Auto-generate Svelte TypeScript types AND Zod schemas (using `openapi-zod-client` or similar) from the FastAPI `openapi.json` so frontend/backend stay 100% concurrent.
 - [x] **Offline/Local:** Implement `localStorage` persistence for anonymous users
 - [x] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
-- [x] **Feature:** "Featured Metric" Option - Allow user to toggle their preferred metric (e.g. IPF GL instead of DOTS) globally.
+- [ ] **Feature:** "Featured Metric" Option - Allow user to toggle their preferred metric (e.g. IPF GL instead of DOTS) globally.
 - [x] **Validation:** Add **Zod** to validate form inputs before sending to API
 - [x] **Tests (Unit):** Set up **Vitest** for perfect component and business logic function coverage
 - [x] **Tests (E2E):** Write your first **Playwright** E2E test (e.g., "User can calculate Wilks without logging in")
@@ -226,11 +225,19 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [ ] **Merge:** PR and merge into `main`. Watch `release-please` automatically tag `v1.0.0`
 
 ### Phase 7 — Cross-Stack Feature Deploy (The Masterclass)
-- [ ] **Branching:** Create branch `feat/pr-graphs`
-- [ ] **Backend:** Update the database and API endpoints to support retrieving historical data specifically for graphing (aggregate data over time).
-- [ ] **SvelteKit:** Build a `/pr-graphs` page with a beautiful interactive chart using a library like Chart.js or LayerChart.
-- [ ] **React Native:** Implement the matching logic using `react-native-chart-kit` or Skia graphs to achieve a native feel.
-- [ ] **Flutter:** Replicate the exact visual layout and graphing logic using Flutter's `fl_chart`.
+- [ ] **Branching:** Create branch `feat/advanced-features`
+- [ ] **Backend:** 
+    - Support aggregate historical data for graphing.
+    - **User Preferences**: Add a `profile` or `settings` table to Supabase to store `preferred_units` (kg/lbs) and `preferred_coefficient` (Wilks/DOTS/IPF/etc).
+- [ ] **UX/UI Refinement (Mobile Focus):**
+    - **Sticky Header**: Implement a pinned header so navigation remains accessible during long history scrolls.
+    - **Mobile Results Layout**: Adjust the "Calculator -> Results" flow so results are visible immediately after calculation without aggressive scrolling.
+    - **Header Layout**: Fix the mobile header "line break" issue; align Title, Theme Toggle, and Login into a cohesive, space-efficient bar.
+    - **Auth Polish**: Add "Show Password" toggle buttons to Login and Registration forms.
+- [ ] **User Preferences & Persistence:**
+    - Implement a cross-platform strategy for Unit (kg/lbs) and Metric (DOTS/IPF) selection.
+    - **Persistence**: Use `localStorage/AsyncStorage/shared_prefs` for anonymous users and the backend DB for logged-in users.
+- [ ] **SvelteKit/Flutter/RN Implementation:** Build these features across all three stacks to ensure a unified user experience.
 - [ ] **Merge:** This final phase gives you a true understanding of deploying a major, data-driven feature update across multiple completely segregated mono-repo architectures simultaneously!
 
 ---

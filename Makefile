@@ -1,9 +1,13 @@
 SHELL := /bin/bash
-.PHONY: api-dev api-test svelte-dev web-test-e2e web-test-unit gen-types
+.PHONY: dev api-dev api-test svelte-dev web-test-e2e web-test-unit gen-types
 
 # Starts the FastAPI development server with hot-reloading
 api-dev:
 	cd backends/fastapi && uv run fastapi dev main.py
+
+# Starts both backend and frontend development servers concurrently
+dev:
+	make -j 2 api-dev svelte-dev
 
 # Runs the complete pytest suite and Ruff linter for the FastAPI backend
 api-test:
