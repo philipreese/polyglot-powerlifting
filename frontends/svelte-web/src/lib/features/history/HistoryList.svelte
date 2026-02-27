@@ -82,20 +82,32 @@
     </div>
   {/if}
 
-  {#if state.history.length === 0 && !state.showSyncPrompt}
+  {#if state.isLoading && state.history.length === 0}
+    <div class="flex flex-col items-center py-12 text-center bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
+      <div class="w-8 h-8 border-4 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin mb-3"></div>
+      <p class="text-sm text-slate-500 dark:text-slate-400">Loading your history...</p>
+    </div>
+  {:else if state.history.length === 0 && !state.showSyncPrompt}
     <div class="flex flex-col items-center py-8 text-center bg-slate-50 dark:bg-slate-800/50 rounded-xl border border-dashed border-slate-200 dark:border-slate-700">
       <p class="text-sm text-slate-500 dark:text-slate-400">No recorded history yet.</p>
       <p class="text-xs text-slate-400 mt-1">Calculations will be saved here locally.</p>
     </div>
   {:else}
     <!-- Grid format handles width much better than pure list -->
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar">
-      {#each displayedHistory as record, i (record.id ?? `local-${i}`)}
-        <HistoryItem 
-          {record} 
-          onDelete={(id) => state.deleteHistoryRecord(id)}
-        />
-      {/each}
+    <div class="relative">
+      {#if state.isLoading}
+        <div class="absolute inset-0 bg-white/50 dark:bg-slate-900/50 z-10 flex items-center justify-center rounded-xl backdrop-blur-[1px]">
+           <div class="w-6 h-6 border-3 border-indigo-600/20 border-t-indigo-600 rounded-full animate-spin"></div>
+        </div>
+      {/if}
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 max-h-[500px] overflow-y-auto pr-2 custom-scrollbar {state.isLoading ? 'opacity-50' : ''}">
+        {#each displayedHistory as record, i (record.id ?? `local-${i}`)}
+          <HistoryItem 
+            {record} 
+            onDelete={(id) => state.deleteHistoryRecord(id)}
+          />
+        {/each}
+      </div>
     </div>
     
     {#if state.history.length > 10}

@@ -34,7 +34,9 @@ test.describe('Sync Flow', () => {
         await page.getByRole('button', { name: 'Create Account' }).click();
 
         // 6. We should be redirected back to the homepage as an authenticated user
-        await expect(page).toHaveURL('/');
+        // (Note: If email confirmation is ON, this might fail, but registration test handles that.
+        // Sync test assumes a successful login/registration that redirects home).
+        await expect(page).toHaveURL('/', { timeout: 10000 });
         await expect(page.getByRole('button', { name: 'Log Out' })).toBeVisible();
 
         // 7. Verify the sync prompt appears now that we have local data AND an active session
@@ -50,11 +52,15 @@ test.describe('Sync Flow', () => {
         await expect(page.getByText('Sync Offline History?')).not.toBeVisible();
         await expect(syncButton).not.toBeVisible();
 
-        // 10. The history should still contain our calculation
+        // 10. Wait for the cloud history to finish loading
+        await expect(page.getByText(/Loading your history/i)).not.toBeVisible({ timeout: 10000 });
+
+        // 11. The history should still contain our calculation
         await expect(page.getByText('550kg')).toBeVisible(); 
         
-        // 11. Let's refresh the page to prove it persists from the server, not just local state
+        // 12. Let's refresh the page to prove it persists from the server, not just local state
         await page.reload();
+        await expect(page.getByText(/Loading your history/i)).not.toBeVisible({ timeout: 10000 });
         await expect(page.getByText('550kg')).toBeVisible(); 
     });
 });

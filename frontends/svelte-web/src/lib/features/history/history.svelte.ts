@@ -12,7 +12,7 @@ export class HistoryState {
     error = $state<string | null>(null);
     private _cleanup: (() => void) | null = null;
     private _lastLoadedUserId: string | null = null;
-    private _isLoadingCloud = false;
+    isLoading = $state(false);
 
     // Derived: Only show sync prompt if logged in AND we have local data
     showSyncPrompt = $derived(getAuth().user != null && this._localHistory.length > 0);
@@ -74,7 +74,7 @@ export class HistoryState {
 
     private async _loadCloudHistory() {
         const user = getAuth().user;
-        if (!user || this._isLoadingCloud) return;
+        if (!user || this.isLoading) return;
         
         // Stability guard: We only want to try loading ONCE per user-session 
         // to avoid infinite loops if the API fails or is empty.
@@ -82,14 +82,14 @@ export class HistoryState {
             return;
         }
 
-        this._isLoadingCloud = true;
+        this.isLoading = true;
         try {
             this._cloudHistory = await ApiService.getHistory();
         } catch (err) {
             console.error("Failed to load cloud history:", err);
         } finally {
             this._lastLoadedUserId = user.id;
-            this._isLoadingCloud = false;
+            this.isLoading = false;
         }
     }
 
@@ -99,6 +99,7 @@ export class HistoryState {
         this._cloudHistory = [];
         this._lastLoadedUserId = null; // Reset so the next user can load
         this._loadLocalHistory(); // Restore local context
+        this.isLoading = false;
         this.error = null;
     }
 
