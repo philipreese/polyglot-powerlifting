@@ -11,6 +11,8 @@ export class HistoryState {
     isSyncing = $state(false);
     error = $state<string | null>(null);
     private _cleanup: (() => void) | null = null;
+    private _lastLoadedUserId: string | null = null;
+    private _isLoadingCloud = false;
 
     // Derived: Only show sync prompt if logged in AND we have local data
     showSyncPrompt = $derived(getAuth().user != null && this._localHistory.length > 0);
@@ -56,9 +58,7 @@ export class HistoryState {
 
     private _loadInitialData() {
         this._loadLocalHistory();
-        if (getAuth().user) {
-            this._loadCloudHistory();
-        }
+        // Removed direct _loadCloudHistory call to prevent double-init with the $effect below
     }
 
     private _loadLocalHistory() {
@@ -74,15 +74,24 @@ export class HistoryState {
     }
 
     private async _loadCloudHistory() {
+        const user = getAuth().user;
+        if (!user || this._isLoadingCloud) return;
+
+        this._isLoadingCloud = true;
         try {
             this._cloudHistory = await ApiService.getHistory();
+            this._lastLoadedUserId = user.id;
         } catch (err) {
             console.error("Failed to load cloud history:", err);
+            // Don't wipe _cloudHistory here, keep what we have (optimistic UI)
+        } finally {
+            this._isLoadingCloud = false;
         }
     }
 
     private handleLogout() {
         this._cloudHistory = [];
+        this._lastLoadedUserId = null;
         this._loadLocalHistory(); // Restore local context
         this.error = null;
     }

@@ -1,5 +1,5 @@
 import { supabase } from '$lib/core/services/supabase';
-import type { User, Session } from '@supabase/supabase-js';
+import type { User, Session, AuthChangeEvent } from '@supabase/supabase-js';
 
 class AuthState {
   user = $state<User | null>(null);
@@ -14,6 +14,12 @@ class AuthState {
   }
 
   async init() {
+    if (!supabase) {
+      console.warn('Supabase client not initialized. Auth features will be unavailable.');
+      this.isLoading = false;
+      return;
+    }
+
     const { data: { session }, error } = await supabase.auth.getSession();
     
     if (!error && session) {
@@ -24,7 +30,7 @@ class AuthState {
     this.isLoading = false;
 
     // Listen to all future auth event changes automatically
-    supabase.auth.onAuthStateChange((_event, session) => {
+    supabase.auth.onAuthStateChange((_event: AuthChangeEvent, session: Session | null) => {
       this.session = session;
       this.user = session?.user ?? null;
       this.isLoading = false;

@@ -40,6 +40,9 @@ class LiftsService:
             db_record = self.lifts_repo.create(lift_model, token)
             if db_record:
                 return db_record
+            else:
+                from middleware.logging import DomainException
+                raise DomainException("Failed to save lift to cloud", status_code=500)
                 
         return lift_model
 
