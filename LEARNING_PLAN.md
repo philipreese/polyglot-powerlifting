@@ -60,18 +60,12 @@ lifts (
 
 ---
 
-## API Contract (define before any code)
-```
-POST   /lifts          calculate + save (or just return if anonymous)
-GET    /lifts          list history (requires auth header or local)
+POST   /lifts/sync     bulk import local history
+GET    /lifts          list history (requires auth header)
 DELETE /lifts/{id}     delete one entry
 DELETE /lifts          clear all history
 
-POST   /auth/register
-POST   /auth/login
-POST   /auth/logout
-GET    /auth/me
-```
+Authentication is handled via **Supabase Auth** directly on the frontend. The backend verifies JWTs in the middleware but does not expose its own `/auth` routes, maintaining a "Sovereign" data-focused API.
 
 Frontends send `Authorization: Bearer <token>` when logged in. Anonymous requests use local storage only — the API is not called for history at all in anonymous mode.
 
