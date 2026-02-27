@@ -43,15 +43,17 @@ async def get_current_user(credentials: Optional[HTTPAuthorizationCredentials] =
         if user_resp and user_resp.user:
             return user_resp.user.id
             
-        logger.warning("auth_failed", 
-            reason="No user returned from Supabase",
-            response_type=type(user_resp).__name__
+        # DANGER: We need to see the REAL error for Phase 2.1
+        logger.warning("auth_failed_detail", 
+            resp_str=str(user_resp), # This will show error messages from Supabase
+            has_user=bool(user_resp.user) if user_resp else False
         )
         return None
     except Exception as e:
-        logger.error("auth_exception", 
+        logger.error("auth_exception_detail", 
             error=str(e),
-            type=type(e).__name__
+            type=type(e).__name__,
+            token_prefix=f"{token[:10]}..." if 'token' in locals() else "None"
         )
         return None
 

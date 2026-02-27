@@ -58,7 +58,6 @@ export class HistoryState {
 
     private _loadInitialData() {
         this._loadLocalHistory();
-        // Removed direct _loadCloudHistory call to prevent double-init with the $effect below
     }
 
     private _loadLocalHistory() {
@@ -77,19 +76,19 @@ export class HistoryState {
         const user = getAuth().user;
         if (!user || this._isLoadingCloud) return;
         
-        // Stability guard: Don't reload if we already have this user's data
-        // unless it's a forced refresh (which we don't have yet)
-        if (this._lastLoadedUserId === user.id && this._cloudHistory.length > 0) {
+        // Stability guard: We only want to try loading ONCE per user-session 
+        // to avoid infinite loops if the API fails or is empty.
+        if (this._lastLoadedUserId === user.id) {
             return;
         }
 
         this._isLoadingCloud = true;
         try {
             this._cloudHistory = await ApiService.getHistory();
-            this._lastLoadedUserId = user.id;
         } catch (err) {
             console.error("Failed to load cloud history:", err);
         } finally {
+            this._lastLoadedUserId = user.id;
             this._isLoadingCloud = false;
         }
     }
@@ -98,7 +97,7 @@ export class HistoryState {
         if (this._lastLoadedUserId === null && this._cloudHistory.length === 0) return;
         
         this._cloudHistory = [];
-        this._lastLoadedUserId = null;
+        this._lastLoadedUserId = null; // Reset so the next user can load
         this._loadLocalHistory(); // Restore local context
         this.error = null;
     }
