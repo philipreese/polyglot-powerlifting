@@ -26,35 +26,19 @@ async def get_current_user(credentials: Optional[HTTPAuthorizationCredentials] =
     logger = structlog.get_logger()
     try:
         token = credentials.credentials
-        segments = token.count('.') + 1
         
-        # Safe logging for production debugging
-        logger.info("auth_attempt", 
-            token_prefix=f"{token[:10]}..." if token else "none",
-            segments=segments,
-            has_supabase_client=supabase is not None
-        )
-
-        if segments != 3:
-            logger.error("auth_invalid_segments", count=segments)
+        # Quick validation before calling Supabase
+        if token.count('.') != 2:
             return None
 
         user_resp = supabase.auth.get_user(token)
         if user_resp and user_resp.user:
             return user_resp.user.id
             
-        # DANGER: We need to see the REAL error for Phase 2.1
-        logger.warning("auth_failed_detail", 
-            resp_str=str(user_resp), # This will show error messages from Supabase
-            has_user=bool(user_resp.user) if user_resp else False
-        )
+        logger.warning("auth_failed", has_user=False)
         return None
     except Exception as e:
-        logger.error("auth_exception_detail", 
-            error=str(e),
-            type=type(e).__name__,
-            token_prefix=f"{token[:10]}..." if 'token' in locals() else "None"
-        )
+        logger.error("auth_exception", error_type=type(e).__name__)
         return None
 
 async def require_current_user(credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)) -> str:

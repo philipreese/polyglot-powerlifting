@@ -20,10 +20,6 @@ export class ApiService {
    * Zodios will inherently throw an error, protecting our Svelte UI.
    */
   static async calculateScores(data: LiftRequest) {
-    const config = getAuthConfig();
-    if (import.meta.env.PROD) {
-      console.log("[ApiService] AUTH_CHECK:", config.headers ? "PRESENT" : "MISSING");
-    }
     try {
       // The typescript compiler knows this takes `LiftRequest` and returns `LiftResponse`!
       const res = await apiClient.post('/lifts/', data, {

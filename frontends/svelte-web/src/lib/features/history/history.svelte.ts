@@ -24,8 +24,6 @@ export class HistoryState {
             window.addEventListener('offline', () => (this.isOnline = false));
 
             this._loadInitialData();
-            
-            
             // React to auth changes
             this._cleanup = $effect.root(() => {
                 $effect(() => {
@@ -76,8 +74,7 @@ export class HistoryState {
         const user = getAuth().user;
         if (!user || this.isLoading) return;
         
-        // Stability guard: We only want to try loading ONCE per user-session 
-        // to avoid infinite loops if the API fails or is empty.
+        // to avoid infinite loops if the API is slow or returns an empty result.
         if (!force && this._lastLoadedUserId === user.id) {
             return;
         }
