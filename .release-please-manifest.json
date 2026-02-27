@@ -1,5 +1,7 @@
 {
   ".": "0.4.0",
   "backends/fastapi": "0.4.0",
+  "backends/nextjs": "0.1.0",
+  "packages/polylifts": "0.1.0",
   "frontends/svelte-web": "0.1.0"
 }

@@ -1,6 +1,7 @@
 import { setContext, getContext } from 'svelte';
 import { getAuth } from '$lib/features/auth/auth.svelte';
 import { LiftSchema } from '$lib/core/schemas';
+import type { LiftResponse } from '$lib/core/schemas';
 import { ApiService } from '$lib/core/services/api';
 import type { HistoryState } from '$lib/features/history';
 
@@ -81,7 +82,7 @@ export class CalculatorFormState {
 
         this.isLoading = true;
         try {
-            const data = await ApiService.calculateScores(parsed.data);
+            const data: LiftResponse = await ApiService.calculateScores(parsed.data);
             this.wilks = data.wilks;
             this.dots = data.dots;
             this.ipf_gl = data.ipf_gl;

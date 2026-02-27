@@ -20,7 +20,7 @@ class TestLiftsService(unittest.TestCase):
             equipment="raw",
             squat=200.0,
             bench=100.0,
-            deadlift=250.0
+            deadlift=250.0,
         )
 
         # Act
@@ -41,11 +41,11 @@ class TestLiftsService(unittest.TestCase):
             equipment="raw",
             squat=200.0,
             bench=100.0,
-            deadlift=250.0
+            deadlift=250.0,
         )
         user_id = "550e8400-e29b-41d4-a716-446655440000"
         token = "fake-jwt-token"
-        
+
         # Mock the repository return value
         expected_response = LiftResponse(
             id=UUID("550e8400-e29b-41d4-a716-446655440001"),
@@ -60,7 +60,7 @@ class TestLiftsService(unittest.TestCase):
             wilks=360.5,
             dots=370.2,
             ipf_gl=65.4,
-            reshel=380.1
+            reshel=380.1,
         )
         self.mock_repo.create.return_value = expected_response
 
@@ -82,7 +82,7 @@ class TestLiftsService(unittest.TestCase):
             equipment="raw",
             squat=200.0,
             bench=100.0,
-            deadlift=250.0
+            deadlift=250.0,
         )
 
         # Act
@@ -99,9 +99,17 @@ class TestLiftsService(unittest.TestCase):
         token = "fake-jwt-token"
         lifts = [
             LiftResponse(
-                bodyweight=80.0, gender="male", equipment="raw",
-                squat=200.0, bench=100.0, deadlift=250.0,
-                total=550.0, wilks=360.5, dots=370.2, ipf_gl=65.4, reshel=380.1
+                bodyweight=80.0,
+                gender="male",
+                equipment="raw",
+                squat=200.0,
+                bench=100.0,
+                deadlift=250.0,
+                total=550.0,
+                wilks=360.5,
+                dots=370.2,
+                ipf_gl=65.4,
+                reshel=380.1,
             )
         ]
         self.mock_repo.bulk_create.return_value = lifts

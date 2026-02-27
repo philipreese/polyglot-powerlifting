@@ -1,0 +1,45 @@
+name: Next.js Backend CI
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'backends/nextjs/**'
+      - 'packages/polylifts/**'
+      - '.github/workflows/nextjs-ci.yml'
+  pull_request:
+    branches: [ "main" ]
+    paths:
+      - 'backends/nextjs/**'
+      - 'packages/polylifts/**'
+      - '.github/workflows/nextjs-ci.yml'
+
+jobs:
+  test-and-lint:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Install Node.js
+      uses: actions/setup-node@v4
+      with:
+        node-version: 22
+
+    - name: Install pnpm
+      uses: pnpm/action-setup@v3
+      with:
+        version: 9
+        run_install: false
+
+    - name: Install dependencies
+      run: pnpm install
+
+    - name: Build shared core
+      run: pnpm run build --filter @polylifts/core
+
+    - name: Lint Next.js
+      run: pnpm run lint --filter backends/nextjs
+
+    - name: Run Next.js Tests
+      run: npx vitest run --filter backends/nextjs

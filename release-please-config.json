@@ -6,6 +6,12 @@
     "backends/fastapi": {
       "release-type": "python"
     },
+    "backends/nextjs": {
+      "release-type": "node"
+    },
+    "packages/polylifts": {
+      "release-type": "node"
+    },
     "frontends/svelte-web": {
       "release-type": "node"
     }

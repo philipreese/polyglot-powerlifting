@@ -111,15 +111,16 @@ export class HistoryState {
         
         try {
             if (this._localHistory.length > 0) {
-                await ApiService.syncLocalLifts(this._localHistory);
+                const synced = await ApiService.syncLocalLifts(this._localHistory);
                 // SUCCESS: Wipe local data
                 this.clearLocalStorage();
+                // Update cloud history immediately with the synced records
+                this._cloudHistory = [...synced, ...this._cloudHistory];
             }
         } catch (err: any) {
             this.error = "Sync Failed: " + (err.message || "Unknown Error");
         } finally {
             this.isSyncing = false;
-            await this._loadCloudHistory(true);
         }
     }
 

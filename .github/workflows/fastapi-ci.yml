@@ -5,12 +5,12 @@ on:
     branches: [ "main" ]
     paths:
       - 'backends/fastapi/**'
-      - '.github/workflows/backend-ci.yml'
+      - '.github/workflows/fastapi-ci.yml'
   pull_request:
     branches: [ "main" ]
     paths:
       - 'backends/fastapi/**'
-      - '.github/workflows/backend-ci.yml'
+      - '.github/workflows/fastapi-ci.yml'
 
 jobs:
   test-and-lint:

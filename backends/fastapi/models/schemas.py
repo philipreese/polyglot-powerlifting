@@ -13,6 +13,7 @@ class LiftRequest(BaseModel):
     bench: float = Field(..., ge=0, description="Bench in kg")
     deadlift: float = Field(..., ge=0, description="Deadlift in kg")
 
+
 class LiftResponse(LiftRequest):
     id: Optional[UUID] = None
     user_id: Optional[UUID] = None

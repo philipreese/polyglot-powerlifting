@@ -1,9 +1,7 @@
-import type { z } from 'zod';
-import { schemas } from './openapi';
+import { LiftRequestSchema, LiftResponseSchema } from '@polylifts/core';
+import type { LiftRequest, LiftResponse } from '@polylifts/core';
 
-// Cleanly export the extracted schema to the rest of the application
-export const LiftSchema = schemas.LiftRequest;
-export type LiftRequest = z.infer<typeof LiftSchema>;
-
-export const LiftResponseSchema = schemas.LiftResponse;
-export type LiftResponse = z.infer<typeof LiftResponseSchema>;
+// Re-export from the shared core package to maintain internal API stability
+export const LiftSchema = LiftRequestSchema;
+export { LiftResponseSchema };
+export type { LiftRequest, LiftResponse };

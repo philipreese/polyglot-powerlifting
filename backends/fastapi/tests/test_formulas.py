@@ -7,25 +7,30 @@ def test_wilks_male():
     score = calculate_wilks(100.0, 600.0, "male")
     assert 360 < score < 370
 
+
 def test_wilks_female():
     # 60kg female lifting 300kg total
     # expected wilks ~ 334.5
     score = calculate_wilks(60.0, 300.0, "female")
     assert 330 < score < 340
 
+
 def test_dots_male():
     score = calculate_dots(100.0, 600.0, "male")
     assert 360 < score < 370
+
 
 def test_ipf_gl_raw_male():
     score = calculate_ipf_gl(100.0, 600.0, "male", "raw")
     # New IPF GL scores are usually around 60-120
     assert 50 < score < 150
 
+
 def test_reshel_male_exact():
     # 100kg exactly should trigger the exact lookup (0.915)
     score = calculate_reshel(100.0, 600.0, "male")
     assert score == 600.0 * 0.915
+
 
 def test_reshel_male_interpolated():
     # 95kg male should be halfway between 90kg (0.969) and 100kg (0.915)

@@ -7,10 +7,12 @@ from fastapi.responses import JSONResponse
 
 class DomainException(Exception):
     """Base class for all application-specific exceptions."""
+
     def __init__(self, message: str, status_code: int = 400):
         self.message = message
         self.status_code = status_code
         super().__init__(self.message)
+
 
 def setup_logging():
     """Configure structlog for JSON in prod and pretty-print in dev."""
@@ -35,6 +37,7 @@ def setup_logging():
         cache_logger_on_first_use=True,
     )
 
+
 async def domain_exception_handler(request: Request, exc: DomainException):
     """Global handler for application errors."""
     logger = structlog.get_logger()
@@ -43,6 +46,7 @@ async def domain_exception_handler(request: Request, exc: DomainException):
         status_code=exc.status_code,
         content={"detail": exc.message},
     )
+
 
 async def universal_exception_handler(request: Request, exc: Exception):
     """Catch-all for unexpected system errors."""

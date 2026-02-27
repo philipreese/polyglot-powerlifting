@@ -1,47 +1,16 @@
 import { makeApi, Zodios, type ZodiosOptions } from '@zodios/core';
-import { z } from 'zod';
+import { 
+  z, 
+  LiftRequestSchema, 
+  LiftResponseSchema,
+  ValidationErrorSchema as ValidationError,
+  HTTPValidationErrorSchema as HTTPValidationError
+} from '@polylifts/core';
 
-const LiftResponse = z
-  .object({
-    bodyweight: z.number().gt(20),
-    gender: z.string().regex(/^(male|female)$/),
-    equipment: z.string().regex(/^(raw|single-ply|multi-ply)$/),
-    squat: z.number().gte(0),
-    bench: z.number().gte(0),
-    deadlift: z.number().gte(0),
-    id: z.union([z.string(), z.null()]).optional(),
-    user_id: z.union([z.string(), z.null()]).optional(),
-    created_at: z.union([z.string(), z.null()]).optional(),
-    total: z.number(),
-    wilks: z.number(),
-    dots: z.number(),
-    ipf_gl: z.number(),
-    reshel: z.number()
-  })
-  .passthrough();
-const LiftRequest = z
-  .object({
-    bodyweight: z.number().gt(20),
-    gender: z.string().regex(/^(male|female)$/),
-    equipment: z.string().regex(/^(raw|single-ply|multi-ply)$/),
-    squat: z.number().gte(0),
-    bench: z.number().gte(0),
-    deadlift: z.number().gte(0)
-  })
-  .passthrough();
-const ValidationError = z
-  .object({
-    loc: z.array(z.union([z.string(), z.number()])),
-    msg: z.string(),
-    type: z.string(),
-    input: z.unknown().optional(),
-    ctx: z.object({}).partial().passthrough().optional()
-  })
-  .passthrough();
-const HTTPValidationError = z
-  .object({ detail: z.array(ValidationError) })
-  .partial()
-  .passthrough();
+export type { LiftRequest, LiftResponse } from '@polylifts/core';
+
+const LiftResponse = LiftResponseSchema;
+const LiftRequest = LiftRequestSchema;
 
 export const schemas = {
   LiftResponse,
