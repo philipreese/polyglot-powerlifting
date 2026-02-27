@@ -1,4 +1,5 @@
 import { setContext, getContext } from 'svelte';
+import { getAuth } from '$lib/features/auth/auth.svelte';
 import { LiftSchema } from '$lib/core/schemas';
 import { ApiService } from '$lib/core/services/api';
 import type { HistoryState } from '$lib/features/history';
@@ -29,7 +30,32 @@ export class CalculatorFormState {
             if (stored && ['dots', 'wilks', 'ipf_gl', 'reshel'].includes(stored)) {
                 this.preferredMetric = stored;
             }
+
+            // Sync with auth changes
+            $effect.root(() => {
+                $effect(() => {
+                    const user = getAuth().user;
+                    if (!user) {
+                        this.reset();
+                    }
+                });
+            });
         }
+    }
+
+    reset() {
+        this.bodyweight = 80.0;
+        this.gender = 'male';
+        this.equipment = 'raw';
+        this.squat = 0.0;
+        this.bench = 0.0;
+        this.deadlift = 0.0;
+        this.wilks = null;
+        this.dots = null;
+        this.ipf_gl = null;
+        this.reshel = null;
+        this.isLoading = false;
+        this.error = null;
     }
 
     setPreferredMetric(metric: 'dots' | 'wilks' | 'ipf_gl' | 'reshel') {

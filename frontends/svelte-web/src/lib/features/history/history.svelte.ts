@@ -4,11 +4,16 @@ import type { LiftResponse } from '$lib/core/schemas';
 import { ApiService } from '$lib/core/services/api';
 
 export class HistoryState {
-    history = $state<LiftResponse[]>([]);
-    showSyncPrompt = $state(false);
+    private _localHistory = $state<LiftResponse[]>([]);
+    private _cloudHistory = $state<LiftResponse[]>([]);
+    
     isOnline = $state(true);
     isSyncing = $state(false);
     error = $state<string | null>(null);
+    private _cleanup: (() => void) | null = null;
+
+    // Derived: Only show sync prompt if logged in AND we have local data
+    showSyncPrompt = $derived(getAuth().user != null && this._localHistory.length > 0);
 
     constructor() {
         if (typeof window !== 'undefined') {
@@ -16,49 +21,70 @@ export class HistoryState {
             window.addEventListener('online', () => (this.isOnline = true));
             window.addEventListener('offline', () => (this.isOnline = false));
 
-            this.loadHistory();
-            $effect.root(() => {
+            this._loadInitialData();
+            
+            
+            // React to auth changes
+            this._cleanup = $effect.root(() => {
                 $effect(() => {
                     const user = getAuth().user;
                     if (user) {
-                        this.handleLogin();
+                        this._loadCloudHistory();
                     } else {
-                        this.loadHistory();
+                        this.handleLogout();
                     }
                 });
             });
         }
     }
 
-    private loadHistory() {
+    /**
+     * Primary getter for the UI. 
+     * If logged in: Shows ONLY cloud history.
+     * If logged out: Shows ONLY local history.
+     */
+    get history() {
+        return getAuth().user ? this._cloudHistory : this._localHistory;
+    }
+
+    /**
+     * Accurate count of unique local unsynced items.
+     */
+    get localHistoryCount() {
+        return this._localHistory.length;
+    }
+
+    private _loadInitialData() {
+        this._loadLocalHistory();
         if (getAuth().user) {
-            ApiService.getHistory().then(h => this.history = h).catch(console.error);
-        } else {
-            const stored = localStorage.getItem('anonymous_lifts_history');
-            if (stored) {
-                try {
-                    this.history = JSON.parse(stored);
-                } catch {
-                    this.history = [];
-                }
-            } else {
-                this.history = [];
+            this._loadCloudHistory();
+        }
+    }
+
+    private _loadLocalHistory() {
+        const stored = localStorage.getItem('anonymous_lifts_history');
+        if (stored) {
+            try {
+                this._localHistory = JSON.parse(stored);
+            } catch (err) {
+                console.error("Failed to parse local history", err);
+                this._localHistory = [];
             }
         }
     }
 
-    private async handleLogin() {
-        const stored = localStorage.getItem('anonymous_lifts_history');
-        if (stored) {
-            try {
-                const local = JSON.parse(stored);
-                if (local.length > 0) {
-                    this.showSyncPrompt = true;
-                    return;
-                }
-            } catch {}
+    private async _loadCloudHistory() {
+        try {
+            this._cloudHistory = await ApiService.getHistory();
+        } catch (err) {
+            console.error("Failed to load cloud history:", err);
         }
-        this.loadHistory();
+    }
+
+    private handleLogout() {
+        this._cloudHistory = [];
+        this._loadLocalHistory(); // Restore local context
+        this.error = null;
     }
 
     async confirmSync() {
@@ -71,38 +97,42 @@ export class HistoryState {
         this.error = null;
         
         try {
-            const stored = localStorage.getItem('anonymous_lifts_history');
-            if (stored) {
-                const local = JSON.parse(stored);
-                if (local.length > 0) {
-                    await ApiService.syncLocalLifts(local);
-                    // CRITICAL: Only clear local data AFTER server confirms success
-                    localStorage.removeItem('anonymous_lifts_history');
-                    this.showSyncPrompt = false;
-                }
+            if (this._localHistory.length > 0) {
+                await ApiService.syncLocalLifts(this._localHistory);
+                // SUCCESS: Wipe local data
+                this.clearLocalStorage();
             }
         } catch (err: any) {
-            // Keep the prompt open if it fails so users can retry
             this.error = "Sync Failed: " + (err.message || "Unknown Error");
         } finally {
             this.isSyncing = false;
-            this.loadHistory();
+            this._loadCloudHistory();
         }
     }
 
-    dismissSync() {
-        this.showSyncPrompt = false;
-        this.error = null;
+    /**
+     * Wipes local storage/state without syncing to server.
+     */
+    clearLocalStorage() {
+        this._localHistory = [];
         localStorage.removeItem('anonymous_lifts_history');
-        this.loadHistory();
     }
 
     addRecordToHistory(record: LiftResponse) {
-        // Defensive check against duplicates (prevents Svelte crash)
-        if (record.id && this.history.some(r => r.id === record.id)) return;
-        
-        this.history = [record, ...this.history];
-        this._persistStateLocallyIfAnonymous();
+        const user = getAuth().user;
+
+        // Logged In: Add to cloud list directly (optimistic UI)
+        if (user) {
+            if (!this._cloudHistory.some(r => r.id === record.id)) {
+                this._cloudHistory = [record, ...this._cloudHistory];
+            }
+        } else {
+            // Anonymous: Add to local list and save
+            if (!this._localHistory.some(r => r.id === record.id)) {
+                this._localHistory = [record, ...this._localHistory];
+                localStorage.setItem('anonymous_lifts_history', JSON.stringify(this._localHistory));
+            }
+        }
     }
 
     async deleteHistoryRecord(id: string | null | undefined) {
@@ -110,30 +140,34 @@ export class HistoryState {
 
         if (getAuth().user) {
             const success = await ApiService.deleteHistoryRecord(id);
-            if (!success) {
+            if (success) {
+                this._cloudHistory = this._cloudHistory.filter(r => r.id !== id);
+            } else {
                 this.error = "Failed to remote delete";
-                return;
             }
+        } else {
+            this._localHistory = this._localHistory.filter(r => r.id !== id);
+            localStorage.setItem('anonymous_lifts_history', JSON.stringify(this._localHistory));
         }
-        this.history = this.history.filter(record => record.id !== id);
-        this._persistStateLocallyIfAnonymous();
     }
 
     async clearHistory() {
         if (getAuth().user) {
             const success = await ApiService.clearHistory();
-            if (!success) {
+            if (success) {
+                this._cloudHistory = [];
+            } else {
                 this.error = "Failed to clear remotely";
-                return;
             }
+        } else {
+            this.clearLocalStorage();
         }
-        this.history = [];
-        this._persistStateLocallyIfAnonymous();
     }
 
-    private _persistStateLocallyIfAnonymous() {
-        if (typeof window !== 'undefined' && !getAuth().user) {
-            localStorage.setItem('anonymous_lifts_history', JSON.stringify(this.history));
+    destroy() {
+        if (this._cleanup) {
+            this._cleanup();
+            this._cleanup = null;
         }
     }
 }

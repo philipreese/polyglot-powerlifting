@@ -1,4 +1,5 @@
 from typing import Optional
+import structlog
 
 from fastapi import Depends, status
 from fastapi.security import HTTPAuthorizationCredentials, HTTPBearer
@@ -22,14 +23,17 @@ async def get_current_user(credentials: Optional[HTTPAuthorizationCredentials] =
     if not supabase:
         raise DomainException("Database not configured", status_code=500)
         
+    logger = structlog.get_logger()
     try:
         token = credentials.credentials
         user = supabase.auth.get_user(token)
         if user and user.user:
             return user.user.id
+            
+        logger.warning("auth_failed", reason="No user returned from Supabase")
         return None
-    except Exception:
-        # Supabase throws an exception if the token is completely invalid/expired
+    except Exception as e:
+        logger.warning("auth_exception", error=str(e))
         return None
 
 async def require_current_user(credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)) -> str:

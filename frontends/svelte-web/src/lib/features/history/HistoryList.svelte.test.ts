@@ -38,15 +38,12 @@ describe('HistoryList Component', () => {
 
     it('renders sync prompt and connects network actions', async () => {
         mockState.showSyncPrompt = true;
+        mockState.localHistoryCount = 5;
         render(HistoryList);
         
         expect(screen.getByText('Sync Offline History?')).toBeInTheDocument();
+        expect(screen.getByText(/found 5 un-synced/i)).toBeInTheDocument();
         
-        // Assert Dismiss hook
-        const dismissBtn = screen.getByTitle('Dismiss');
-        await fireEvent.click(dismissBtn);
-        expect(mockState.dismissSync).toHaveBeenCalledOnce();
-
         // Assert Sync Hook
         const syncBtn = screen.getByText('Sync to Cloud');
         await fireEvent.click(syncBtn);
