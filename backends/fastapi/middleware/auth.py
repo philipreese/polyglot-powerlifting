@@ -22,13 +22,37 @@ async def get_current_user(credentials: Optional[HTTPAuthorizationCredentials] =
     if not supabase:
         raise DomainException("Database not configured", status_code=500)
         
+    import structlog
+    logger = structlog.get_logger()
     try:
         token = credentials.credentials
+        segments = token.count('.') + 1
+        
+        # Safe logging for production debugging
+        logger.info("auth_attempt", 
+            token_prefix=f"{token[:10]}..." if token else "none",
+            segments=segments,
+            has_supabase_client=supabase is not None
+        )
+
+        if segments != 3:
+            logger.error("auth_invalid_segments", count=segments)
+            return None
+
         user_resp = supabase.auth.get_user(token)
         if user_resp and user_resp.user:
             return user_resp.user.id
+            
+        logger.warning("auth_failed", 
+            reason="No user returned from Supabase",
+            response_type=type(user_resp).__name__
+        )
         return None
-    except Exception:
+    except Exception as e:
+        logger.error("auth_exception", 
+            error=str(e),
+            type=type(e).__name__
+        )
         return None
 
 async def require_current_user(credentials: Optional[HTTPAuthorizationCredentials] = Depends(security)) -> str:
