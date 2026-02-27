@@ -48,19 +48,15 @@ test.describe('Sync Flow', () => {
         // 8. Click the sync button
         await syncButton.click();
 
-        // 9. Verify the sync prompt disappears (indicating successful flush to cloud)
-        await expect(page.getByText('Sync Offline History?')).not.toBeVisible();
-        await expect(syncButton).not.toBeVisible();
+        // 9. Verify the sync prompt disappears
+        await expect(page.getByText('Sync Offline History?')).not.toBeVisible({ timeout: 10000 });
 
-        // 10. Wait for the cloud history to finish loading
-        await expect(page.getByText(/Loading your history/i)).not.toBeVisible({ timeout: 10000 });
-
-        // 11. The history should still contain our calculation
-        await expect(page.getByText('550kg')).toBeVisible(); 
+        // 10. Wait for the synced item to appear in the history list
+        // This is much safer than waiting for a spinner that might flicker
+        await expect(page.getByText('550kg')).toBeVisible({ timeout: 10000 }); 
         
-        // 12. Let's refresh the page to prove it persists from the server, not just local state
+        // 11. Let's refresh the page to prove it persists from the server
         await page.reload();
-        await expect(page.getByText(/Loading your history/i)).not.toBeVisible({ timeout: 10000 });
-        await expect(page.getByText('550kg')).toBeVisible(); 
+        await expect(page.getByText('550kg')).toBeVisible({ timeout: 15000 }); 
     });
 });

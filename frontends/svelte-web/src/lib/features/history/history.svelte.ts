@@ -122,7 +122,7 @@ export class HistoryState {
             this.error = "Sync Failed: " + (err.message || "Unknown Error");
         } finally {
             this.isSyncing = false;
-            this._loadCloudHistory();
+            await this._loadCloudHistory();
         }
     }
 
