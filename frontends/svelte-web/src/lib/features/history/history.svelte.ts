@@ -72,13 +72,13 @@ export class HistoryState {
         }
     }
 
-    private async _loadCloudHistory() {
+    private async _loadCloudHistory(force = false) {
         const user = getAuth().user;
         if (!user || this.isLoading) return;
         
         // Stability guard: We only want to try loading ONCE per user-session 
         // to avoid infinite loops if the API fails or is empty.
-        if (this._lastLoadedUserId === user.id) {
+        if (!force && this._lastLoadedUserId === user.id) {
             return;
         }
 
@@ -122,7 +122,7 @@ export class HistoryState {
             this.error = "Sync Failed: " + (err.message || "Unknown Error");
         } finally {
             this.isSyncing = false;
-            await this._loadCloudHistory();
+            await this._loadCloudHistory(true);
         }
     }
 
