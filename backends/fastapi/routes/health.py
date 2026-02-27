@@ -1,7 +1,7 @@
-from fastapi import APIRouter
-from config import settings
-from services.db import supabase
 import structlog
+from config import settings
+from fastapi import APIRouter
+from services.db import supabase
 
 router = APIRouter(prefix="/health", tags=["health"])
 logger = structlog.get_logger()
@@ -19,7 +19,7 @@ async def check_supabase():
     try:
         # Simple query to check connectivity
         if supabase:
-            res = supabase.table("lifts").select("count", count="exact").limit(1).execute()
+            _ = supabase.table("lifts").select("count", count="exact").limit(1).execute()
             connectivity = "ok"
         else:
             connectivity = "client_missing"

@@ -6,8 +6,8 @@ from middleware.logging import (
     setup_logging,
     universal_exception_handler,
 )
-from routes.lifts import router as lifts_router
 from routes.health import router as health_router
+from routes.lifts import router as lifts_router
 
 # Initialize structured logging
 setup_logging()
