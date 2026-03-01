@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.4.2](https://github.com/philipreese/polyglot-powerlifting/compare/v0.4.1...v0.4.2) (2026-03-01)
+
+
+### Bug Fixes
+
+* restore deploy and automate lockfile sync ([43d82ac](https://github.com/philipreese/polyglot-powerlifting/commit/43d82ac69121e620843e3360d16b45af43810d10))
+* restore deploy and automate lockfile sync ([ef986be](https://github.com/philipreese/polyglot-powerlifting/commit/ef986be368613db3d376124e349cd182d2b8a877))
+
 ## [0.4.1](https://github.com/philipreese/polyglot-powerlifting/compare/v0.4.0...v0.4.1) (2026-03-01)
 
 
