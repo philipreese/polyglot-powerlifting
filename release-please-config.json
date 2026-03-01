@@ -1,13 +1,16 @@
 {
   "packages": {
-    ".": {
-      "release-type": "simple"
-    },
     "backends/fastapi": {
-      "release-type": "python"
+      "release-type": "python",
+      "package-name": "powerlifting-api"
     },
     "frontends/svelte-web": {
-      "release-type": "node"
+      "release-type": "node",
+      "package-name": "svelte-web"
+    },
+    "packages/polylifts": {
+      "release-type": "node",
+      "package-name": "polylifts"
     }
   }
 }
