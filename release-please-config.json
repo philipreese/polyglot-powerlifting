@@ -7,10 +7,6 @@
     "frontends/svelte-web": {
       "release-type": "node",
       "package-name": "svelte-web"
-    },
-    "packages/polylifts": {
-      "release-type": "node",
-      "package-name": "polylifts"
     }
   }
 }
