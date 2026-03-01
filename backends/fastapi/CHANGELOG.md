@@ -1,5 +1,18 @@
 # Changelog
 
+## [0.5.1](https://github.com/philipreese/polyglot-powerlifting/compare/powerlifting-api-v0.5.0...powerlifting-api-v0.5.1) (2026-03-01)
+
+
+### Bug Fixes
+
+* force bot to see source change ([35fb8e2](https://github.com/philipreese/polyglot-powerlifting/commit/35fb8e2b7fbe1a7bdee4972c2b10920ec9836fb8))
+* force bot to see source change ([d85e4af](https://github.com/philipreese/polyglot-powerlifting/commit/d85e4af20cc9de977b777b52a4f3c1281ccc76f6))
+* synchronize lockfile for v0.5.0 release ([0aad201](https://github.com/philipreese/polyglot-powerlifting/commit/0aad20148caba98f5d60491bdd4e4cc5f4a97d09))
+* synchronize lockfile for v0.5.0 release ([8f4396c](https://github.com/philipreese/polyglot-powerlifting/commit/8f4396c241dfa2473790888b38903313bafa5ade))
+* trigger bot on package path ([a09e877](https://github.com/philipreese/polyglot-powerlifting/commit/a09e87709b5b5a31ae54f785db2f7a4bbe74b096))
+* trigger bot on package path ([e1a0feb](https://github.com/philipreese/polyglot-powerlifting/commit/e1a0feb399541c674aa1366c74c36c2a0a6d91de))
+* trigger release please and sync ([abcebee](https://github.com/philipreese/polyglot-powerlifting/commit/abcebee3944f7a61820fc66013cd9e1fdeb285b0))
+
 ## [0.5.0](https://github.com/philipreese/polyglot-powerlifting/compare/powerlifting-api-v0.4.3...powerlifting-api-v0.5.0) (2026-03-01)
 
 

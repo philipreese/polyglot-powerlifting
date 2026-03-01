@@ -1,4 +1,4 @@
 {
-  "backends/fastapi": "0.5.0",
-  "frontends/svelte-web": "0.1.0"
+  "backends/fastapi": "0.5.1",
+  "frontends/svelte-web": "0.1.1"
 }
