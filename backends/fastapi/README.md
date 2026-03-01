@@ -48,3 +48,4 @@ The API is containerized for deployment (e.g., to Render).
 podman build -t polyglot-api .
 ```
 Interactive Swagger UI is available at `/docs` when running.
+# trigger sync
