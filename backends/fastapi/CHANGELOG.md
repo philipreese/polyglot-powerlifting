@@ -1,5 +1,13 @@
 # Changelog
 
+## [0.5.1](https://github.com/philipreese/polyglot-powerlifting/compare/powerlifting-api-v0.5.0...powerlifting-api-v0.5.1) (2026-03-01)
+
+
+### Bug Fixes
+
+* synchronize lockfile for v0.5.0 release ([0aad201](https://github.com/philipreese/polyglot-powerlifting/commit/0aad20148caba98f5d60491bdd4e4cc5f4a97d09))
+* synchronize lockfile for v0.5.0 release ([8f4396c](https://github.com/philipreese/polyglot-powerlifting/commit/8f4396c241dfa2473790888b38903313bafa5ade))
+
 ## [0.5.0](https://github.com/philipreese/polyglot-powerlifting/compare/powerlifting-api-v0.4.3...powerlifting-api-v0.5.0) (2026-03-01)
 
 
