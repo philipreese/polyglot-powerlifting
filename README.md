@@ -79,9 +79,9 @@ make dev
 
 ### Run Tests
 ```bash
-make api-test    # Backend Unit & Integration
-make web-test    # Frontend Vitest
-make e2e-test    # Cross-stack Playwright browser tests
+make api-test      # Backend Unit & Integration
+make web-test-unit # Frontend Vitest
+make web-test-e2e  # Cross-stack Playwright browser tests
 ```
 
 ---
