@@ -38,3 +38,4 @@ app.include_router(health_router)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to the Polyglot Powerlifting API. View docs at /docs"}
+
