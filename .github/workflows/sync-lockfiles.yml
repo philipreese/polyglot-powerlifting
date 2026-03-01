@@ -1,0 +1,51 @@
+name: Sync Lockfiles
+
+on:
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: write
+
+jobs:
+  sync-lockfiles:
+    # Trigger only on PRs from the release-please branch
+    if: startsWith(github.head_ref, 'release-please--branches--main')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.head_ref }}
+          fetch-depth: 0
+
+      - name: Setup uv
+        run: |
+          curl -LsSf https://astral.sh/uv/install.sh | sh
+          echo "$HOME/.cargo/bin" >> $GITHUB_PATH
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Setup pnpm
+        run: |
+          corepack enable
+          corepack prepare pnpm@latest --activate
+
+      - name: Sync Lockfiles
+        run: |
+          # Sync Python
+          cd backends/fastapi && uv lock && cd ../..
+          
+          # Sync Node
+          pnpm install --no-frozen-lockfile
+
+      - name: Commit and Push
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com
+          git add .
+          git commit -m "chore: synchronize lockfiles" || echo "No changes to commit"
+          git push origin HEAD:${{ github.head_ref }}
