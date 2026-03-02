@@ -41,9 +41,10 @@ polylifts-test:
 web-check:
 	cd frontends/svelte-web && pnpm run check
 
-# Builds everything for production
-build: polylifts-build
-	cd frontends/svelte-web && pnpm run build
+# Builds everything for production using Turborepo
+build:
+	pnpm build
 
-# Runs the complete verification suite
-test: polylifts-test api-test web-test-unit web-test-e2e
+# Runs the complete verification suite using Turborepo
+test:
+	pnpm test

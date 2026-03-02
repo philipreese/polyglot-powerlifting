@@ -50,14 +50,15 @@ jobs:
     - name: Install dependencies
       run: pnpm install
 
-    - name: Install Playwright Browsers
-      run: pnpm exec playwright install --with-deps
-
-    - name: Run Svelte code checks
-      run: pnpm run check
+    - name: Run checks and build dependencies
+      run: pnpm turbo check --filter=svelte-web
       env:
         SUPABASE_URL: ${{ secrets.SUPABASE_URL }}
         SUPABASE_ANON_KEY: ${{ secrets.SUPABASE_ANON_KEY }}
+
+    - name: Install Playwright Browsers
+      run: pnpm exec playwright install --with-deps
+      working-directory: frontends/svelte-web
 
     - name: Install uv (for FastAPI)
       uses: astral-sh/setup-uv@v5
