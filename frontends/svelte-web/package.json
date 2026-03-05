@@ -16,7 +16,7 @@
 	},
 	"devDependencies": {
 		"@playwright/test": "^1.58.2",
-		"@sveltejs/adapter-auto": "^7.0.0",
+		"@sveltejs/adapter-vercel": "^5.5.3",
 		"@sveltejs/kit": "^2.50.2",
 		"@sveltejs/vite-plugin-svelte": "^6.2.4",
 		"@tailwindcss/vite": "^4.2.1",
@@ -39,6 +39,7 @@
 		"@supabase/supabase-js": "^2.97.0",
 		"@zodios/core": "^10.9.6",
 		"mode-watcher": "^1.1.0",
-		"zod": "^4.3.6"
+		"polylifts": "workspace:*",
+		"zod": "3.24.3"
 	}
 }

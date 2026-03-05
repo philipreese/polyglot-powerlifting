@@ -14,11 +14,13 @@ Calculate and track Wilks, DOTS, IPF GL, and Reshel scores based on bodyweight, 
 
 ## AI Collaboration Guidelines
 - **Explain Everything**: The AI must explain *what* commands it runs, *how* tools work under the hood (like SSH, WSL, or networking), and *why* specific approaches are chosen. No "black box" magic. The goal is deep understanding. The AI must explain EVERY step before moving on, avoiding large dumps of undefined code.
-- **Commit Frequency**: The AI should commit frequently, particularly separating "Initialization/Scaffolding" steps from "Configuration/Styling" steps so the Git history serves as a clean learning log.
+- **Commit Frequency**: The AI should recommend committing frequently, particularly separating "Initialization/Scaffolding" steps from "Configuration/Styling" steps so the Git history serves as a clean learning log.
 - **Explicit Permission**: The AI must NEVER commit or push code to Git without explicitly asking the user for permission first.
 - **Industry Best Practices**: The AI must use and explain modern design patterns (e.g., repository pattern, dependency injection, middleware) rather than taking quick-and-dirty shortcuts. Code should be clean, modular, and testable from the start.
 - **Self-Critique & Anti-Patterns**: The AI must actively scan for Tech Debt, circular dependencies, and duplicate code logic before proposing any feature implementation, and explicitly ask the User if they would like to abstract the anti-pattern before moving forward.
 - **Plan Updating**: The AI must update the plan as we go, including checking off items from the checklist below, and explicitly ask the User if they would like to update the plan before moving forward.
+- **Code Review**: The AI must perform a code review of its own work before moving on to the next step, checking for Tech Debt, circular dependencies, and duplicate code logic.
+- **Waiting for instructions**: The AI must wait for the user to give the go-ahead before moving on to the next step. The user might have questions or want to change the plan.
 ---
 
 ## Auth + Storage Pattern
@@ -182,7 +184,7 @@ We will use **WSL (Windows Subsystem for Linux)** for the backend and web stacks
 - [x] **Type Sync:** Auto-generate Svelte TypeScript types AND Zod schemas (using `openapi-zod-client` or similar) from the FastAPI `openapi.json` so frontend/backend stay 100% concurrent.
 - [x] **Offline/Local:** Implement `localStorage` persistence for anonymous users
 - [x] **Integration:** Connect to FastAPI; build the login flow with Supabase Auth
-- [ ] **Feature:** "Featured Metric" Option - Allow user to toggle their preferred metric (e.g. IPF GL instead of DOTS) globally.
+- [x] **Feature:** "Featured Metric" Option - Allow user to toggle their preferred metric (e.g. IPF GL instead of DOTS) globally.
 - [x] **Validation:** Add **Zod** to validate form inputs before sending to API
 - [x] **Tests (Unit):** Set up **Vitest** for perfect component and business logic function coverage
 - [x] **Tests (E2E):** Write your first **Playwright** E2E test (e.g., "User can calculate Wilks without logging in")

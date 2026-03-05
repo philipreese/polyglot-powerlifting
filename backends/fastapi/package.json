@@ -1,0 +1,11 @@
+{
+  "name": "@polylifts/api",
+  "version": "0.5.1",
+  "private": true,
+  "scripts": {
+    "test": "uv run pytest",
+    "lint": "uv run ruff check .",
+    "dev": "uv run fastapi dev main.py",
+    "build": "echo 'No build step for FastAPI'"
+  }
+}
