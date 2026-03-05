@@ -14,8 +14,6 @@ importers:
 
   backends/fastapi: {}
 
-  backends/nextjs: {}
-
   frontends/svelte-web:
     dependencies:
       '@supabase/supabase-js':

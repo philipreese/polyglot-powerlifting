@@ -1,5 +1,5 @@
 {
   "backends/fastapi": "0.5.1",
   "frontends/svelte-web": "0.1.1",
-  "packages/polylifts": "0.1.0"
+  "packages/polylifts": "0.1.1"
 }
