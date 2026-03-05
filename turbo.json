@@ -1,9 +1,10 @@
 {
   "$schema": "https://turbo.build/schema.json",
+  "globalEnv": ["SUPABASE_URL", "SUPABASE_ANON_KEY", "VITE_API_URL"],
   "tasks": {
     "build": {
       "dependsOn": ["^build"],
-      "outputs": [".svelte-kit/**", "build/**", ".next/**", "!.next/cache/**", "dist/**"]
+      "outputs": [".vercel/output/**", ".svelte-kit/**", "build/**", ".next/**", "!.next/cache/**", "dist/**"]
     },
     "test": {
       "dependsOn": ["^build"],
